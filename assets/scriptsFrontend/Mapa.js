@@ -139,24 +139,40 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ═══════════════════════════════════════════════════════════
        MOSTRAR DETALLE DEL CARGADOR EN EL PANEL LATERAL
     ════════════════════════════════════════════════════════════ */
-    function mostrarDetalle(cargador) {
+    async function mostrarDetalle(cargador) {
         cargadorActivo = cargador;
 
         panelNombre.textContent    = cargador.nombre;
-        panelTipo.textContent      = capitalizarPrimera(cargador.tipo);
+        panelTipo.textContent      = etiquetaTipo(cargador.tipo);
         panelCoste.textContent     = `${cargador.coste} €/kWh`;
         panelTiempo.textContent    = `${cargador.tiempoEstimado} min`;
         panelDireccion.textContent = cargador.direccion;
 
-        // Badge de estado
-        panelEstado.className  = `panel-valor estado-${cargador.estado}`;
+        panelEstado.className   = `panel-valor estado-${cargador.estado}`;
         panelEstado.textContent = etiquetaEstado(cargador.estado);
 
-        // Deshabilitar reserva si no está libre
         botonReservar.disabled = cargador.estado !== 'libre';
 
-        // Mostrar el panel
+        try {
+            const favoritos  = await obtenerFavoritos();
+            const esFavorito = favoritos.some(f => f.idCargador === cargador.id);
+            actualizarBotonFavorito(esFavorito);
+        } catch (error) {
+            actualizarBotonFavorito(false);
+        }
+
         panelDetalle.classList.remove('oculto');
+    }
+
+    function actualizarBotonFavorito(esFavorito) {
+        if (esFavorito) {
+            botonFavorito.textContent = 'Eliminar de favoritos';
+            botonFavorito.classList.add('boton-favorito-activo');
+        } else {
+            botonFavorito.textContent = 'Añadir a favoritos';
+            botonFavorito.classList.remove('boton-favorito-activo');
+        }
+        botonFavorito.disabled = false;
     }
 
     /* ═══════════════════════════════════════════════════════════
@@ -234,16 +250,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ═══════════════════════════════════════════════════════════
-       AÑADIR A FAVORITOS
+       AÑADIR / ELIMINAR FAVORITO
     ════════════════════════════════════════════════════════════ */
     botonFavorito.addEventListener('click', async () => {
         if (!cargadorActivo) return;
+        const esFavorito = botonFavorito.classList.contains('boton-favorito-activo');
         try {
-            await añadirFavorito(cargadorActivo.id);
-            botonFavorito.textContent = 'Añadido a favoritos';
-            botonFavorito.disabled = true;
+            if (esFavorito) {
+                await eliminarFavorito(cargadorActivo.id);
+                actualizarBotonFavorito(false);
+            } else {
+                await añadirFavorito(cargadorActivo.id);
+                actualizarBotonFavorito(true);
+            }
         } catch (error) {
-            console.error('Error al añadir favorito:', error.message);
+            console.error('Error al gestionar favorito:', error.message);
         }
     });
 
@@ -292,6 +313,15 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ═══════════════════════════════════════════════════════════
        UTILIDADES
     ════════════════════════════════════════════════════════════ */
+    function etiquetaTipo(tipo) {
+        const etiquetas = {
+            rapido:     'Carga rápida',
+            estandar:   'Carga estándar',
+            compatible: 'Carga lenta'
+        };
+        return etiquetas[tipo] || tipo;
+    }
+
     function etiquetaEstado(estado) {
         const etiquetas = {
             libre:         'Libre',

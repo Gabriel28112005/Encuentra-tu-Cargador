@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Gabriel Kaakedjian, Gabriel Peña" />
+    <meta name="description" content="Panel de técnico" />
+    <title>Encuentra tu Cargador — Técnico</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- CSS propio -->
+    <link rel="stylesheet" href="../assets/css/Tecnico.css" />
+</head>
+<body data-rol="tecnico">
+
+    <!-- ═══════════════════════════════════════════════════
+         CABECERA
+    ════════════════════════════════════════════════════ -->
+    <header class="cabecera-sitio">
+        <div class="cabecera-interior">
+            <div class="marca">
+                <div class="marca-icono">
+                    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="18" cy="18" r="17" stroke="#1a56db" stroke-width="2"/>
+                        <path d="M20 7L12 20h7l-3 9 11-13h-7l3-9z" fill="#1a56db"/>
+                    </svg>
+                </div>
+                <div class="marca-texto">
+                    <span class="marca-titulo">Encuentra tu Cargador</span>
+                    <span class="marca-subtitulo">Panel de técnico</span>
+                </div>
+            </div>
+            <div class="cabecera-usuario">
+                <span id="textoUsuario" title="Nombre de usuario"></span>
+                <span class="badge-rol" title="Rol de la cuenta">Técnico</span>
+                <button onclick="cerrarSesion()">Cerrar sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════
+         CONTENIDO PRINCIPAL
+    ════════════════════════════════════════════════════ -->
+    <main class="contenedor-principal">
+
+        <!-- ── Dashboard ── -->
+        <section id="seccionDashboard" class="seccion-dashboard">
+
+            <h1 class="titulo-bienvenida">Bienvenido, <span id="nombreBienvenida"></span></h1>
+
+            <!-- Tarjetas de estadísticas -->
+            <div class="grid-estadisticas">
+                <div class="tarjeta-estadistica">
+                    <span class="estadistica-numero" id="statCargadores">—</span>
+                    <span class="estadistica-etiqueta">Cargadores en total</span>
+                </div>
+                <div class="tarjeta-estadistica">
+                    <span class="estadistica-numero" id="statLibres">—</span>
+                    <span class="estadistica-etiqueta">Cargadores libres</span>
+                </div>
+                <div class="tarjeta-estadistica">
+                    <span class="estadistica-numero" id="statReparacion">—</span>
+                    <span class="estadistica-etiqueta">En reparación</span>
+                </div>
+                <div class="tarjeta-estadistica">
+                    <span class="estadistica-numero" id="statIncidencias">—</span>
+                    <span class="estadistica-etiqueta">Incidencias pendientes</span>
+                </div>
+            </div>
+
+            <!-- Tarjetas de acceso rápido -->
+            <div class="grid-accesos">
+                <div class="tarjeta-acceso" onclick="irA('seccionCargadores')">
+                    <div class="acceso-icono">⚡</div>
+                    <div class="acceso-nombre">Cargadores</div>
+                    <div class="acceso-descripcion">Ver y actualizar estado de cargadores</div>
+                </div>
+                <div class="tarjeta-acceso" onclick="irA('seccionIncidencias')">
+                    <div class="acceso-icono">🔔</div>
+                    <div class="acceso-nombre">Incidencias</div>
+                    <div class="acceso-descripcion">Gestionar incidencias reportadas</div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ── Sección: Cargadores ── -->
+        <section id="seccionCargadores" class="tarjeta-seccion">
+            <div class="seccion-cabecera">
+                <h2 class="seccion-titulo">Estado de cargadores</h2>
+            </div>
+            <div class="barra-filtros">
+                <input type="text" id="buscarCargador" class="entrada-filtro" placeholder="Buscar por nombre o dirección..." />
+                <select id="filtroTipoCargador" class="select-filtro">
+                    <option value="">Todos los tipos</option>
+                    <option value="rapido">Carga rápida</option>
+                    <option value="estandar">Carga estándar</option>
+                    <option value="compatible">Carga lenta</option>
+                </select>
+                <select id="filtroEstadoCargador" class="select-filtro">
+                    <option value="">Todos los estados</option>
+                    <option value="libre">Libre</option>
+                    <option value="ocupado">Ocupado</option>
+                    <option value="en_reparacion">En reparación</option>
+                </select>
+            </div>
+            <div class="contenedor-tabla" id="contenedorCargadores">
+                <p class="texto-cargando">Cargando cargadores...</p>
+            </div>
+        </section>
+
+        <!-- ── Sección: Incidencias ── -->
+        <section id="seccionIncidencias" class="tarjeta-seccion">
+            <div class="seccion-cabecera">
+                <h2 class="seccion-titulo">Incidencias reportadas</h2>
+            </div>
+            <div class="barra-filtros">
+                <select id="filtroLeidaIncidencia" class="select-filtro">
+                    <option value="">Todas</option>
+                    <option value="0">Sin leer</option>
+                    <option value="1">Leídas</option>
+                </select>
+            </div>
+            <div class="contenedor-tabla" id="contenedorIncidencias">
+                <p class="texto-cargando">Cargando incidencias...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════
+         MODAL — ACTUALIZAR ESTADO CARGADOR
+    ════════════════════════════════════════════════════ -->
+    <div class="fondo-modal oculto" id="fondoModalEstado">
+        <div class="tarjeta-modal">
+            <h3 class="modal-titulo">Actualizar estado</h3>
+            <p class="modal-subtitulo" id="modalNombreCargador"></p>
+            <input type="hidden" id="idCargadorActualizar" />
+            <div class="grupo-campo">
+                <label class="etiqueta-campo">Nuevo estado</label>
+                <select id="modalNuevoEstado" class="entrada-campo">
+                    <option value="libre">Libre</option>
+                    <option value="ocupado">Ocupado</option>
+                    <option value="en_reparacion">En reparación</option>
+                </select>
+            </div>
+            <p class="mensaje-modal oculto" id="mensajeModalEstado"></p>
+            <div class="modal-acciones">
+                <button class="boton-cancelar-modal" id="botonCancelarEstado">Cancelar</button>
+                <button class="boton-enviar-modal" id="botonGuardarEstado">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts propios -->
+    <script src="../assets/scriptsFrontend/RutasProtegidas.js"></script>
+    <script src="../assets/scriptsFrontend/Api.js"></script>
+    <script src="../assets/scriptsFrontend/Notificaciones.js"></script>
+    <script src="../assets/scriptsFrontend/Tecnico.js"></script>
+
+</body>
+</html>

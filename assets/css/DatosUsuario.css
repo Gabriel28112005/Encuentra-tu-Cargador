@@ -1,0 +1,406 @@
+/* ═══════════════════════════════════════════════════════════
+   DatosUsuario.css — Estilos de la página de perfil
+   Encuentra tu Cargador — Informática II
+   Autores: Gabriel Kaakedjian, Gabriel Peña
+════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+/* ── Reset y base ───────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: #f9fafb;
+    color: #111827;
+    min-height: 100vh;
+}
+
+button {
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+}
+
+input {
+    font-family: 'Outfit', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: #1a56db;
+}
+
+a:hover {
+    color: #1648c8;
+}
+
+.oculto {
+    display: none !important;
+}
+
+/* ── Cabecera ───────────────────────────────────────────── */
+.cabecera-sitio {
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.cabecera-interior {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+}
+
+.marca-icono svg {
+    width: 30px;
+    height: 30px;
+}
+
+.marca-texto {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.marca-titulo {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.marca-subtitulo {
+    font-size: 0.7rem;
+    color: #9ca3af;
+}
+
+.cabecera-nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.enlace-nav {
+    font-size: 0.875rem;
+    color: #6b7280;
+    padding: 0.3rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.enlace-nav:hover {
+    background-color: #f9fafb;
+    color: #1a56db;
+}
+
+.cabecera-usuario {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.cabecera-usuario span {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.cabecera-usuario button {
+    padding: 0.35rem 0.8rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 0.82rem;
+    color: #374151;
+}
+
+.cabecera-usuario button:hover {
+    background-color: #f9fafb;
+}
+
+/* ── Contenedor principal ───────────────────────────────── */
+.contenedor-principal {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* ── Tarjeta de sección ─────────────────────────────────── */
+.tarjeta-seccion {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.seccion-titulo {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+/* ── Campos de solo lectura ─────────────────────────────── */
+.campo-lectura {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.875rem;
+}
+
+.campo-lectura:last-of-type {
+    border-bottom: none;
+}
+
+.campo-etiqueta {
+    color: #6b7280;
+}
+
+.campo-valor {
+    color: #111827;
+    font-weight: 500;
+}
+
+/* ── Formulario de contraseña ───────────────────────────── */
+.grupo-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.etiqueta-campo {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.entrada-campo {
+    padding: 0.65rem 0.85rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    background-color: #f9fafb;
+    outline: none;
+    color: #111827;
+}
+
+.entrada-campo:focus {
+    border-color: #1a56db;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+}
+
+.mensaje-contrasena {
+    font-size: 0.82rem;
+    margin-bottom: 0.75rem;
+    color: #3B6D11;
+}
+
+.mensaje-contrasena.error {
+    color: #A32D2D;
+}
+
+/* ── Botones ────────────────────────────────────────────── */
+.boton-primario {
+    background-color: #1a56db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    width: 100%;
+}
+
+.boton-primario:hover {
+    background-color: #1648c8;
+}
+
+.boton-peligro {
+    background-color: #FCEBEB;
+    color: #791F1F;
+    border: none;
+    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.boton-peligro:hover {
+    background-color: #F7C1C1;
+}
+
+/* ── Tarjetas de reserva ────────────────────────────────── */
+.tarjeta-reserva {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.reserva-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.reserva-nombre {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.reserva-fecha {
+    font-size: 0.78rem;
+    color: #6b7280;
+}
+
+.reserva-acciones {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+}
+
+/* ── Tarjetas de favorito ───────────────────────────────── */
+.tarjeta-favorito {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.favorito-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.favorito-nombre {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.favorito-direccion {
+    font-size: 0.78rem;
+    color: #6b7280;
+}
+
+/* ── Badges de estado ───────────────────────────────────── */
+.badge-estado {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-weight: 500;
+}
+
+.badge-activa      { background-color: #EAF3DE; color: #27500A; }
+.badge-completada  { background-color: #E6F1FB; color: #0C447C; }
+.badge-cancelada   { background-color: #F1EFE8; color: #444441; }
+.badge-libre       { background-color: #EAF3DE; color: #27500A; }
+.badge-ocupado     { background-color: #FCEBEB; color: #791F1F; }
+.badge-reparacion  { background-color: #FAEEDA; color: #633806; }
+
+/* ── Barra de filtros ───────────────────────────────────── */
+.barra-filtros {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.entrada-filtro {
+    flex: 1;
+    min-width: 140px;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    background-color: #f9fafb;
+    outline: none;
+    font-family: 'Outfit', sans-serif;
+    color: #111827;
+}
+
+.entrada-filtro:focus {
+    border-color: #1a56db;
+    background-color: white;
+}
+
+.select-filtro {
+    padding: 0.5rem 0.6rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    background-color: #f9fafb;
+    outline: none;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    color: #111827;
+}
+
+.select-filtro:focus {
+    border-color: #1a56db;
+}
+
+/* ── Texto vacío y cargando ─────────────────────────────── */
+.texto-cargando {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.texto-vacio {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .contenedor-principal {
+        grid-template-columns: 1fr;
+    }
+
+    .marca-subtitulo {
+        display: none;
+    }
+}

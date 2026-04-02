@@ -152,6 +152,22 @@ input, select, textarea {
     border-color: #d1d5db;
 }
 
+.enlace-perfil {
+    font-size: 0.85rem;
+    color: #1a56db;
+    text-decoration: none;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.enlace-perfil:hover {
+    background-color: #e8f0fe;
+    border-color: #1a56db;
+    color: #1648c8;
+}
+
 /* ── Contenedor principal ───────────────────────────────── */
 .contenedor-mapa {
     display: flex;
@@ -299,6 +315,16 @@ input, select, textarea {
 
 .boton-favorito:hover {
     background-color: #f9fafb;
+}
+
+.boton-favorito-activo {
+    background-color: #FCEBEB;
+    color: #791F1F;
+    border-color: #F7C1C1;
+}
+
+.boton-favorito-activo:hover {
+    background-color: #F7C1C1;
 }
 
 .boton-navegador {
