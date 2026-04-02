@@ -1,0 +1,506 @@
+/* ═══════════════════════════════════════════════════════════
+   Mapa.css — Estilos del mapa interactivo de cargadores
+   Encuentra tu Cargador — Informática II
+   Autores: Gabriel Kaakedjian, Gabriel Peña
+════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+/* ── Reset y base ───────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Outfit', sans-serif;
+    background-color: #f9fafb;
+    color: #111827;
+    overflow: hidden;
+}
+
+button {
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+}
+
+input, select, textarea {
+    font-family: 'Outfit', sans-serif;
+}
+
+.oculto {
+    display: none !important;
+}
+
+/* ── Cabecera ───────────────────────────────────────────── */
+.cabecera-mapa {
+    height: 56px;
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    gap: 1rem;
+    z-index: 1000;
+    position: relative;
+}
+
+.cabecera-marca {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #111827;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.cabecera-marca svg {
+    width: 28px;
+    height: 28px;
+}
+
+.cabecera-controles {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    justify-content: center;
+}
+
+.cabecera-busqueda {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.cabecera-busqueda input {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    width: 200px;
+    outline: none;
+    background-color: #f9fafb;
+}
+
+.cabecera-busqueda input:focus {
+    border-color: #1a56db;
+    background-color: white;
+}
+
+.cabecera-busqueda button {
+    padding: 0.4rem 0.85rem;
+    background-color: #1a56db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.cabecera-busqueda button:hover {
+    background-color: #1648c8;
+}
+
+.cabecera-filtros {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.cabecera-filtros select {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    background-color: #f9fafb;
+    outline: none;
+    cursor: pointer;
+}
+
+.cabecera-filtros select:focus {
+    border-color: #1a56db;
+}
+
+.cabecera-usuario {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.cabecera-usuario span {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.cabecera-usuario button {
+    padding: 0.35rem 0.8rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 0.82rem;
+    color: #374151;
+}
+
+.cabecera-usuario button:hover {
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+}
+
+/* ── Contenedor principal ───────────────────────────────── */
+.contenedor-mapa {
+    display: flex;
+    height: calc(100vh - 56px);
+    position: relative;
+}
+
+/* ── Mapa ───────────────────────────────────────────────── */
+#mapa {
+    flex: 1;
+    height: 100%;
+    z-index: 1;
+}
+
+/* ── Panel lateral de detalles ──────────────────────────── */
+.panel-detalle {
+    width: 280px;
+    height: 100%;
+    background-color: white;
+    border-right: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.panel-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.panel-nombre {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.panel-cerrar {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    color: #9ca3af;
+    line-height: 1;
+    padding: 0;
+}
+
+.panel-cerrar:hover {
+    color: #374151;
+}
+
+.panel-cuerpo {
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.panel-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.875rem;
+}
+
+.panel-etiqueta {
+    color: #6b7280;
+}
+
+.panel-valor {
+    color: #111827;
+    font-weight: 500;
+    text-align: right;
+    max-width: 160px;
+}
+
+/* Badges de estado */
+.estado-libre {
+    background-color: #EAF3DE;
+    color: #27500A;
+    padding: 2px 10px;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.estado-ocupado {
+    background-color: #FCEBEB;
+    color: #791F1F;
+    padding: 2px 10px;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.estado-en_reparacion {
+    background-color: #FAEEDA;
+    color: #633806;
+    padding: 2px 10px;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.panel-botones {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.boton-reservar {
+    background-color: #1a56db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.boton-reservar:hover {
+    background-color: #1648c8;
+}
+
+.boton-reservar:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.boton-favorito {
+    background-color: white;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.6rem;
+    font-size: 0.875rem;
+}
+
+.boton-favorito:hover {
+    background-color: #f9fafb;
+}
+
+.boton-navegador {
+    background-color: white;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.6rem;
+    font-size: 0.875rem;
+}
+
+.boton-navegador:hover {
+    background-color: #f9fafb;
+}
+
+.boton-incidencia {
+    background-color: #FCEBEB;
+    color: #791F1F;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem;
+    font-size: 0.875rem;
+}
+
+.boton-incidencia:hover {
+    background-color: #F7C1C1;
+}
+
+/* ── Leyenda ────────────────────────────────────────────── */
+.leyenda {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.leyenda-fila {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: #374151;
+}
+
+.leyenda-punto {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.leyenda-libre     { background-color: #3B6D11; }
+.leyenda-ocupado   { background-color: #A32D2D; }
+.leyenda-reparacion { background-color: #854F0B; }
+
+/* ── Marcadores personalizados de Leaflet ───────────────── */
+.marcador-cargador {
+    width: 18px;
+    height: 18px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    border: 2.5px solid white;
+}
+
+.marcador-libre      { background-color: #3B6D11; }
+.marcador-ocupado    { background-color: #A32D2D; }
+.marcador-reparacion { background-color: #854F0B; }
+
+/* ── Modales ────────────────────────────────────────────── */
+.fondo-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(17, 24, 39, 0.55);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.tarjeta-modal {
+    background-color: white;
+    border-radius: 16px;
+    padding: 1.75rem;
+    width: 100%;
+    max-width: 420px;
+}
+
+.modal-titulo {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.4rem;
+}
+
+.modal-subtitulo {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+.modal-texto {
+    font-size: 0.875rem;
+    color: #374151;
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+}
+
+.tarjeta-modal textarea {
+    width: 100%;
+    height: 100px;
+    padding: 0.65rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    resize: none;
+    outline: none;
+    margin-bottom: 1rem;
+    background-color: #f9fafb;
+}
+
+.tarjeta-modal textarea:focus {
+    border-color: #1a56db;
+    background-color: white;
+}
+
+.modal-acciones {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.boton-cancelar-modal {
+    background-color: white;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.875rem;
+}
+
+.boton-cancelar-modal:hover {
+    background-color: #f9fafb;
+}
+
+.boton-enviar-modal {
+    background-color: #1a56db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.boton-enviar-modal:hover {
+    background-color: #1648c8;
+}
+
+.modal-mensaje {
+    font-size: 0.82rem;
+    margin-top: 0.75rem;
+    text-align: center;
+    color: #3B6D11;
+}
+
+.modal-mensaje.error {
+    color: #A32D2D;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .cabecera-controles {
+        display: none;
+    }
+
+    .panel-detalle {
+        width: 100%;
+        height: auto;
+        max-height: 50vh;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-right: none;
+        border-top: 1px solid #e5e7eb;
+        z-index: 20;
+    }
+
+    .leyenda {
+        bottom: auto;
+        top: 1rem;
+        right: 1rem;
+    }
+}
