@@ -1,10 +1,3 @@
-/**
- * Server.js
- * Servidor principal de la aplicación.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
-
 'use strict';
 
 const express  = require('express');
@@ -14,11 +7,11 @@ const path     = require('path');
 const http     = require('http');
 
 // Cargar variables de entorno
+
 dotenv.config({ path: path.join(__dirname, '.env') });
 
-// ═══════════════════════════════════════════════════════════
-// IMPORTAR RUTAS
-// ═══════════════════════════════════════════════════════════
+// Importación de rutas
+
 const autentificacionRutas = require('./assets/scriptsBackend/rutas/AutentificacionRutas');
 const usuariosRutas        = require('./assets/scriptsBackend/rutas/Usuarios');
 const cargadoresRutas      = require('./assets/scriptsBackend/rutas/Cargadores');
@@ -28,29 +21,28 @@ const notificacionesRutas  = require('./assets/scriptsBackend/rutas/Notificacion
 const sesionesRutas        = require('./assets/scriptsBackend/rutas/Sesiones');
 const datosUsuarioRutas    = require('./assets/scriptsBackend/rutas/DatosUsuario');
 
-// ═══════════════════════════════════════════════════════════
-// IMPORTAR WEBSOCKET
-// ═══════════════════════════════════════════════════════════
+// Importación Websocket 
+
 const { iniciarWebSocket } = require('./assets/scriptsBackend/WebSocket');
 
-// ═══════════════════════════════════════════════════════════
-// CONFIGURACIÓN DE EXPRESS
-// ═══════════════════════════════════════════════════════════
+
+// Configuración de Express
+
 const app = express();
 
 // Middleware para parsear JSON en las peticiones
 app.use(express.json());
 
-// Middleware CORS — permite peticiones desde el navegador
+// Middleware CORS para permitir peticiones desde el navegador
 app.use(cors());
 
 // Servir archivos estáticos desde la raíz del proyecto
 // Esto permite que el navegador acceda a los HTML, CSS y JS
 app.use(express.static(path.join(__dirname)));
 
-// ═══════════════════════════════════════════════════════════
-// REGISTRAR RUTAS DE LA API
-// ═══════════════════════════════════════════════════════════
+
+// Registro de rutas desde la Api
+
 app.use('/api', autentificacionRutas);
 app.use('/api', usuariosRutas);
 app.use('/api', cargadoresRutas);
@@ -60,37 +52,37 @@ app.use('/api', notificacionesRutas);
 app.use('/api', sesionesRutas);
 app.use('/api', datosUsuarioRutas);
 
-// ═══════════════════════════════════════════════════════════
-// RUTA PRINCIPAL — Servir Index.html
-// ═══════════════════════════════════════════════════════════
+
+// Ruta principal: Servir Index.html
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'Index.html'));
 });
 
-// ═══════════════════════════════════════════════════════════
-// MANEJO DE RUTAS NO ENCONTRADAS (404)
-// ═══════════════════════════════════════════════════════════
+
+// Control de rutas no encontradas (404)
+
 app.use((req, res) => {
     res.status(404).json({ mensaje: 'Ruta no encontrada.' });
 });
 
-// ═══════════════════════════════════════════════════════════
-// MANEJO DE ERRORES INTERNOS (500)
-// ═══════════════════════════════════════════════════════════
+
+// Control de errores internos (500)
+
 app.use((error, req, res, next) => {
     console.error('Error interno del servidor:', error.message);
     res.status(500).json({ mensaje: 'Error interno del servidor.' });
 });
 
-// ═══════════════════════════════════════════════════════════
-// CREAR SERVIDOR HTTP E INICIAR WEBSOCKET
-// ═══════════════════════════════════════════════════════════
+
+// Creación del servidor HTTP a partir de la aplicación Express y luego iniciar el WebSocket en ese mismo servidor para compartir el puerto.
+
 const servidor = http.createServer(app);
 iniciarWebSocket(servidor);
 
-// ═══════════════════════════════════════════════════════════
-// ARRANCAR EL SERVIDOR
-// ═══════════════════════════════════════════════════════════
+
+// Uso del servidor
+
 const PUERTO = process.env.PORT || 3000;
 
 servidor.listen(PUERTO, () => {
