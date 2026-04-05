@@ -1,28 +1,17 @@
--- ═══════════════════════════════════════════════════════════
--- BaseDeDatos.sql
--- Schema completo de la base de datos
--- Encuentra tu Cargador — Informática II
--- Autores: Gabriel Kaakedjian, Gabriel Peña
--- ═══════════════════════════════════════════════════════════
-
--- Crear y seleccionar la base de datos
+-- Creación de la base de datos
 CREATE DATABASE encuentraTuCargador
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 
 USE encuentraTuCargador;
 
--- ═══════════════════════════════════════════════════════════
--- TABLA: roles
--- ═══════════════════════════════════════════════════════════
+-- Creación de la tabla de roles
 CREATE TABLE roles (
     id     INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE
 );
 
--- ═══════════════════════════════════════════════════════════
--- TABLA: usuarios
--- ═══════════════════════════════════════════════════════════
+-- Creación de la tabla de usuarios
 CREATE TABLE usuarios (
     id            INT AUTO_INCREMENT PRIMARY KEY,
     nombre        VARCHAR(100) NOT NULL,
@@ -34,9 +23,7 @@ CREATE TABLE usuarios (
     FOREIGN KEY (idRol) REFERENCES roles(id) ON DELETE RESTRICT
 );
 
--- ═══════════════════════════════════════════════════════════
--- TABLA: cargadores
--- ═══════════════════════════════════════════════════════════
+-- Creación de la tabla de cargadores
 CREATE TABLE cargadores (
     id             INT AUTO_INCREMENT PRIMARY KEY,
     nombre         VARCHAR(150)                              NOT NULL,
@@ -50,9 +37,7 @@ CREATE TABLE cargadores (
     coste          DECIMAL(5, 2)                             NOT NULL DEFAULT 0.00
 );
 
--- ═══════════════════════════════════════════════════════════
--- TABLA: reservas
--- ═══════════════════════════════════════════════════════════
+-- Creación de la tabla de reservas
 CREATE TABLE reservas (
     id              INT AUTO_INCREMENT PRIMARY KEY,
     idUsuario       INT                                        NOT NULL,
@@ -64,9 +49,7 @@ CREATE TABLE reservas (
     FOREIGN KEY (idCargador) REFERENCES cargadores(id) ON DELETE CASCADE
 );
 
--- ═══════════════════════════════════════════════════════════
--- TABLA: favoritos
--- ═══════════════════════════════════════════════════════════
+-- Creación de la tabla de favoritos
 CREATE TABLE favoritos (
     id            INT AUTO_INCREMENT PRIMARY KEY,
     idUsuario     INT      NOT NULL,
@@ -77,9 +60,7 @@ CREATE TABLE favoritos (
     FOREIGN KEY (idCargador) REFERENCES cargadores(id) ON DELETE CASCADE
 );
 
--- ═══════════════════════════════════════════════════════════
--- TABLA: sesiones
--- ═══════════════════════════════════════════════════════════
+-- Creación de la tabla de sesiones
 CREATE TABLE sesiones (
     id              INT AUTO_INCREMENT PRIMARY KEY,
     idUsuario       INT          NOT NULL,
@@ -90,9 +71,7 @@ CREATE TABLE sesiones (
     FOREIGN KEY (idUsuario) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
--- ═══════════════════════════════════════════════════════════
--- TABLA: notificaciones
--- ═══════════════════════════════════════════════════════════
+--  Creación de la tabla de notificaciones
 CREATE TABLE notificaciones (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     idUsuario  INT        NOT NULL,
@@ -104,18 +83,13 @@ CREATE TABLE notificaciones (
     FOREIGN KEY (idCargador) REFERENCES cargadores(id) ON DELETE CASCADE
 );
 
--- ═══════════════════════════════════════════════════════════
--- DATOS INICIALES: roles
--- ═══════════════════════════════════════════════════════════
+-- Inserición en la tabla de "roles" los valores "administrador" con id 1, "técnico" con id 2 y "usuario" con id 3
 INSERT INTO roles (id, nombre) VALUES
 (1, 'administrador'),
 (2, 'tecnico'),
 (3, 'usuario');
 
--- ═══════════════════════════════════════════════════════════
--- DATOS INICIALES: usuarios (contraseñas cifradas con bcrypt)
--- idRol: 1=administrador, 2=tecnico, 3=usuario
--- ═══════════════════════════════════════════════════════════
+-- Inserción en la tabla de "usuarios" los datos de usuarios y sus contraseñas cifradas mediante bcrypt
 INSERT INTO usuarios (nombre, apellido, nombreUsuario, contrasena, idRol) VALUES
 ('Admin',   'Principal', 'Administrador', '$2b$10$Hv.UxGmpkL4AzllaNYuvuuwHvFsChNF/EVsmJI9aFarjIxxW1i35S', 1),
 ('Tecnico', 'Uno',       'Tecnico1',      '$2b$10$9uWoBdZtAg9jX/Ip7FsT1OzK.gCrAbDETfobl3k1bvLYePpwAJYDW', 2),
@@ -125,9 +99,7 @@ INSERT INTO usuarios (nombre, apellido, nombreUsuario, contrasena, idRol) VALUES
 ('Usuario', 'Tres',      'Usuario3',      '$2b$10$h8L6cFMFErRvt91yCyPtH.rcKFthhubXwyQXL457w9SFVfXHUTZ9C', 3),
 ('Usuario', 'Cuatro',    'Usuario4',      '$2b$10$s287yrTsRk.cxXbYJAKES.Jwifzn0Dy3f9lk9AbUhfsUrNDXmEh5a', 3);
 
--- ═══════════════════════════════════════════════════════════
--- DATOS INICIALES: cargadores de ejemplo
--- ═══════════════════════════════════════════════════════════
+-- Inserción en la tabla de "cargadores" de 7 cargadores con sus datos correspondientes
 INSERT INTO cargadores (nombre, direccion, latitud, longitud, tipo, estado, nivelBateria, tiempoEstimado, coste) VALUES
 ('Cargador Centro 1',    'Calle Gran Via 1, Madrid',           40.41650000, -3.70347000, 'rapido',     'libre',         100, 20, 0.35),
 ('Cargador Centro 2',    'Calle Alcala 50, Madrid',            40.41900000, -3.69500000, 'estandar',   'libre',         100, 45, 0.20),
