@@ -71,7 +71,7 @@ CREATE TABLE sesiones (
     FOREIGN KEY (idUsuario) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
---  Creación de la tabla de notificaciones
+-- Creación de la tabla de notificaciones
 CREATE TABLE notificaciones (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     idUsuario  INT        NOT NULL,
