@@ -1,16 +1,9 @@
-/**
- * Index.js
- * Lógica de la pantalla de login y gestión de geolocalización.
- * Encuentra tu Cargador — Informática II
- */
+// Lógica de la pantalla de login y gestión de geolocalización.
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ═══════════════════════════════════════════════════════════
-     REFERENCIAS AL DOM
-  ════════════════════════════════════════════════════════════ */
   const formularioLogin        = document.getElementById('formularioLogin');
   const entradaNombreUsuario   = document.getElementById('nombreUsuario');
   const entradaContrasena      = document.getElementById('contrasena');
@@ -31,15 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const botonDenegarGeo = document.getElementById('botonDenegarGeo');
   const botonReintentar = document.getElementById('botonReintentar');
 
-  /* ═══════════════════════════════════════════════════════════
-     UTILIDADES
-  ════════════════════════════════════════════════════════════ */
-
   /**
    * Muestra u oculta un elemento usando la clase oculto.
    * @param {HTMLElement} elemento - Elemento a mostrar/ocultar
    * @param {boolean} visible - true para mostrar, false para ocultar
    */
+
   function alternarVisibilidad(elemento, visible) {
     if (visible) {
       elemento.classList.remove('oculto');
@@ -53,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * @param {HTMLInputElement} entrada - Campo de entrada
    * @param {HTMLElement} elementoError - Elemento de mensaje de error
    */
+
   function marcarCampoInvalido(entrada, elementoError) {
     entrada.classList.add('campo-invalido');
     alternarVisibilidad(elementoError, true);
@@ -63,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * @param {HTMLInputElement} entrada - Campo de entrada
    * @param {HTMLElement} elementoError - Elemento de mensaje de error
    */
+
   function limpiarCampoError(entrada, elementoError) {
     entrada.classList.remove('campo-invalido');
     alternarVisibilidad(elementoError, false);
@@ -72,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * Muestra el mensaje de error global del formulario.
    * @param {string} mensaje - Texto del error a mostrar
    */
+
   function mostrarAlertaError(mensaje) {
     textoError.textContent = mensaje;
     alternarVisibilidad(alertaError, true);
@@ -80,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /**
    * Oculta el mensaje de error global del formulario.
    */
+
   function ocultarAlertaError() {
     alternarVisibilidad(alertaError, false);
   }
@@ -88,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * Activa o desactiva el estado de carga del botón de login.
    * @param {boolean} cargando - true para mostrar spinner
    */
+
   function establecerEstadoCarga(cargando) {
     botonAcceder.disabled = cargando;
     alternarVisibilidad(textoBoton, !cargando);
@@ -99,18 +94,18 @@ document.addEventListener('DOMContentLoaded', () => {
    * Compatible con Chrome, Firefox, Safari y Edge.
    * @returns {string} - Cadena descriptiva del dispositivo
    */
+
   function obtenerTipoDispositivo() {
     return navigator.userAgent || 'Desconocido';
   }
 
-  /* ═══════════════════════════════════════════════════════════
-     VALIDACIÓN DEL FORMULARIO
-  ════════════════════════════════════════════════════════════ */
+  // Validación del formulario
 
   /**
    * Valida los campos del formulario de login.
    * @returns {boolean} - true si el formulario es válido
    */
+
   function validarFormulario() {
     let formularioValido = true;
 
@@ -131,9 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return formularioValido;
   }
 
-  /* ═══════════════════════════════════════════════════════════
-     MOSTRAR / OCULTAR CONTRASEÑA
-  ════════════════════════════════════════════════════════════ */
+  // Mostrar/ocultar contraseña
   const iconoOjoAbierto = document.getElementById('iconoOjoAbierto');
   const iconoOjoTachado = document.getElementById('iconoOjoTachado');
 
@@ -146,8 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Si estaba oculta, mostrarla; si estaba visible, ocultarla
     entradaContrasena.type = contrasenaOculta ? 'text' : 'password';
 
-    // Cuando la contraseña es visible → mostrar ojo tachado, ocultar ojo abierto
-    // Cuando la contraseña está oculta → mostrar ojo abierto, ocultar ojo tachado
+    // Cuando la contraseña es visible se muestra el ojo tachado
+    // Cuando la contraseña está oculta se muestra el ojo abierto
     alternarVisibilidad(iconoOjoAbierto, !contrasenaOculta);
     alternarVisibilidad(iconoOjoTachado, contrasenaOculta);
 
@@ -157,9 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   });
 
-  /* ═══════════════════════════════════════════════════════════
-     LIMPIAR ERRORES AL ESCRIBIR
-  ════════════════════════════════════════════════════════════ */
+  //Limpiar errores al escribir en los campos del formulario:
   entradaNombreUsuario.addEventListener('input', () => {
     limpiarCampoError(entradaNombreUsuario, errorNombreUsuario);
     ocultarAlertaError();
@@ -170,9 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ocultarAlertaError();
   });
 
-  /* ═══════════════════════════════════════════════════════════
-     ENVÍO DEL FORMULARIO — LOGIN
-  ════════════════════════════════════════════════════════════ */
+  // Envio del formulario del login
   formularioLogin.addEventListener('submit', async (evento) => {
     evento.preventDefault();
     ocultarAlertaError();
@@ -216,24 +205,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  /* ═══════════════════════════════════════════════════════════
-     MODAL DE GEOLOCALIZACIÓN
-  ════════════════════════════════════════════════════════════ */
+  //Modal de geolocalización
 
-  /**
-   * Muestra el modal de solicitud de geolocalización.
-   */
+  // Muestra el modal de solicitud de geolocalización.
   function mostrarModalGeolocalizacion() {
     alternarVisibilidad(panelPermiso, true);
     alternarVisibilidad(panelError, false);
     alternarVisibilidad(fondoModalGeo, true);
   }
 
-  /**
-   * Solicita la geolocalización al navegador.
-   * Compatible con Chrome, Firefox, Safari y Edge.
-   * Solo funciona bajo HTTPS o localhost.
-   */
+  // Solicita la geolocalización al navegador.
+
   function solicitarGeolocalizacion() {
     if (!navigator.geolocation) {
       mostrarErrorGeolocalizacion();
@@ -258,17 +240,13 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   }
 
-  /**
-   * Muestra el panel de error cuando se deniega la ubicación.
-   */
+  // Muestra el panel de error cuando se deniega la ubicación.
   function mostrarErrorGeolocalizacion() {
     alternarVisibilidad(panelPermiso, false);
     alternarVisibilidad(panelError, true);
   }
 
-  /**
-   * Redirige al usuario según su rol almacenado en localStorage.
-   */
+  // Redirige al usuario según su rol almacenado en localStorage.
   function redirigirSegunRol() {
     const rol = localStorage.getItem('rol');
     switch (rol) {
@@ -284,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* ── Eventos del modal ──────────────────────────────────── */
+  // Eventos del modal
   botonAceptarGeo.addEventListener('click', solicitarGeolocalizacion);
 
   botonDenegarGeo.addEventListener('click', mostrarErrorGeolocalizacion);
@@ -294,9 +272,8 @@ document.addEventListener('DOMContentLoaded', () => {
     alternarVisibilidad(panelError, false);
   });
 
-  /* ═══════════════════════════════════════════════════════════
-     COMPROBACIÓN DE SESIÓN ACTIVA AL CARGAR LA PÁGINA
-  ════════════════════════════════════════════════════════════ */
+  // Comproboación de sesión activa al cargar la página
+
   const token    = localStorage.getItem('token');
   const rol      = localStorage.getItem('rol');
   const latitud  = localStorage.getItem('latitud');

@@ -1,17 +1,9 @@
-/**
- * Mapa.js
- * Lógica del mapa interactivo de cargadores con Leaflet.js
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+// Lógica del mapa interactivo de cargadores con Leaflet.js
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    /* ═══════════════════════════════════════════════════════════
-       REFERENCIAS AL DOM
-    ════════════════════════════════════════════════════════════ */
     const panelDetalle         = document.getElementById('panelDetalle');
     const botonCerrarPanel     = document.getElementById('botonCerrarPanel');
     const panelNombre          = document.getElementById('panelNombre');
@@ -41,30 +33,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonConfirmarReserva= document.getElementById('botonConfirmarReserva');
     const mensajeReserva       = document.getElementById('mensajeReserva');
 
-    /* ═══════════════════════════════════════════════════════════
-       ESTADO DE LA APLICACIÓN
-    ════════════════════════════════════════════════════════════ */
     let cargadorActivo  = null;
     let marcadores      = [];
     let todosLosCargadores = [];
 
-    /* ═══════════════════════════════════════════════════════════
-       MOSTRAR NOMBRE DE USUARIO EN CABECERA
-    ════════════════════════════════════════════════════════════ */
+    // Mostrar el nombre de usuario en la cabecera
     const nombreUsuario = localStorage.getItem('nombreUsuario');
     if (textoUsuario && nombreUsuario) {
         textoUsuario.textContent = nombreUsuario;
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       INICIALIZAR MAPA CON LEAFLET
-    ════════════════════════════════════════════════════════════ */
+    //Inicialización del mapa con Leaflet
+    
     const latitud  = parseFloat(localStorage.getItem('latitud'))  || 40.4168;
     const longitud = parseFloat(localStorage.getItem('longitud')) || -3.7038;
 
     const mapa = L.map('mapa', { zoomControl: true }).setView([latitud, longitud], 14);
 
-    // Teselas de OpenStreetMap (gratuito)
+    // Teselas de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         maxZoom: 19
@@ -81,9 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .addTo(mapa)
         .bindPopup('Tu ubicación actual');
 
-    /* ═══════════════════════════════════════════════════════════
-       CREAR ICONO DE MARCADOR SEGÚN ESTADO
-    ════════════════════════════════════════════════════════════ */
+    // Creación del icono del marcador del cargador según su estado
     function crearIcono(estado) {
         const colores = {
             libre:         '#3B6D11',
@@ -100,9 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       CARGAR CARGADORES DESDE LA API
-    ════════════════════════════════════════════════════════════ */
+    // Cargar cargadores desde la API
     async function cargarCargadores() {
         try {
             const datos = await obtenerCargadores();
@@ -113,9 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       RENDERIZAR MARCADORES EN EL MAPA
-    ════════════════════════════════════════════════════════════ */
+    // Renderización de marcadores en el mapa
     function renderizarMarcadores(cargadores) {
         // Eliminar marcadores anteriores
         marcadores.forEach(m => mapa.removeLayer(m));
@@ -136,9 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       MOSTRAR DETALLE DEL CARGADOR EN EL PANEL LATERAL
-    ════════════════════════════════════════════════════════════ */
+    // Mostrar detalles del cargador en el panel lateral
     async function mostrarDetalle(cargador) {
         cargadorActivo = cargador;
 
@@ -175,26 +153,20 @@ document.addEventListener('DOMContentLoaded', () => {
         botonFavorito.disabled = false;
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       OCULTAR PANEL LATERAL
-    ════════════════════════════════════════════════════════════ */
+    // Ocultar panel lateral
     function ocultarDetalle() {
         panelDetalle.classList.add('oculto');
         cargadorActivo = null;
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       CERRAR PANEL AL HACER CLIC EN EL MAPA
-    ════════════════════════════════════════════════════════════ */
+    // Cerrar panel al hacer clic en el mapa
     mapa.on('click', () => {
         ocultarDetalle();
     });
 
     botonCerrarPanel.addEventListener('click', ocultarDetalle);
 
-    /* ═══════════════════════════════════════════════════════════
-       FILTROS
-    ════════════════════════════════════════════════════════════ */
+    // Filtros de cargadores
     function aplicarFiltros() {
         const tipo   = filtroTipo.value;
         const estado = filtroEstado.value;
@@ -220,9 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') aplicarFiltros();
     });
 
-    /* ═══════════════════════════════════════════════════════════
-       RESERVAR CARGADOR
-    ════════════════════════════════════════════════════════════ */
+    // Reserva de cargadores
     botonReservar.addEventListener('click', () => {
         if (!cargadorActivo) return;
         modalNombreReserva.textContent = cargadorActivo.nombre;
@@ -249,9 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /* ═══════════════════════════════════════════════════════════
-       AÑADIR / ELIMINAR FAVORITO
-    ════════════════════════════════════════════════════════════ */
+    // Añadir/eliminar favorito
     botonFavorito.addEventListener('click', async () => {
         if (!cargadorActivo) return;
         const esFavorito = botonFavorito.classList.contains('boton-favorito-activo');
@@ -268,18 +236,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /* ═══════════════════════════════════════════════════════════
-       ABRIR EN NAVEGADOR EXTERNO
-    ════════════════════════════════════════════════════════════ */
+    // Abrir en Google Maps
     botonNavegador.addEventListener('click', () => {
         if (!cargadorActivo) return;
         const url = `https://www.google.com/maps/dir/?api=1&destination=${cargadorActivo.latitud},${cargadorActivo.longitud}`;
         window.open(url, '_blank');
     });
 
-    /* ═══════════════════════════════════════════════════════════
-       REPORTAR INCIDENCIA
-    ════════════════════════════════════════════════════════════ */
+    // Reportar incidencia
     botonIncidencia.addEventListener('click', () => {
         if (!cargadorActivo) return;
         modalNombreCargador.textContent = cargadorActivo.nombre;
@@ -310,9 +274,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /* ═══════════════════════════════════════════════════════════
-       UTILIDADES
-    ════════════════════════════════════════════════════════════ */
     function etiquetaTipo(tipo) {
         const etiquetas = {
             rapido:     'Carga rápida',
@@ -342,9 +303,6 @@ document.addEventListener('DOMContentLoaded', () => {
         elemento.classList.remove('oculto');
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       INICIALIZACIÓN
-    ════════════════════════════════════════════════════════════ */
     cargarCargadores();
 
 });

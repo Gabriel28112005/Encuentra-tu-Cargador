@@ -1,17 +1,9 @@
-/**
- * Admin.js
- * Lógica del panel de administrador.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+/// Lógica del panel de administrador.
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
-
-    /* ═══════════════════════════════════════════════════════════
-       REFERENCIAS AL DOM
-    ════════════════════════════════════════════════════════════ */
+    
     const textoUsuario       = document.getElementById('textoUsuario');
     const nombreBienvenida   = document.getElementById('nombreBienvenida');
     const statUsuarios       = document.getElementById('statUsuarios');
@@ -81,9 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonCancelarCargador   = document.getElementById('botonCancelarCargador');
     const botonGuardarCargador    = document.getElementById('botonGuardarCargador');
 
-    /* ═══════════════════════════════════════════════════════════
-       ESTADO
-    ════════════════════════════════════════════════════════════ */
+    
     let todosLosUsuarios       = [];
     let todosLosCargadores     = [];
     let todasLasReservas       = [];
@@ -91,9 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let todasLasSesiones       = [];
     let todasLasNotificaciones = [];
 
-    /* ═══════════════════════════════════════════════════════════
-       INICIALIZACIÓN
-    ════════════════════════════════════════════════════════════ */
     const nombreUsuario = localStorage.getItem('nombreUsuario');
     const rol           = localStorage.getItem('rol');
     const badgeRol      = document.querySelector('.badge-rol');
@@ -109,9 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cargarTodo();
 
-    /* ═══════════════════════════════════════════════════════════
-       NAVEGACIÓN — SCROLL A SECCIÓN
-    ════════════════════════════════════════════════════════════ */
+    // Scroll a la selección al hacer clic
     window.irA = function(idSeccion) {
         const seccion = document.getElementById(idSeccion);
         if (seccion) {
@@ -119,9 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    /* ═══════════════════════════════════════════════════════════
-       CARGAR TODO AL INICIAR
-    ════════════════════════════════════════════════════════════ */
+    // Cargar todo al iniciar
     async function cargarTodo() {
         await Promise.all([
             cargarUsuarios(),
@@ -134,9 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         actualizarEstadisticas();
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       ESTADÍSTICAS
-    ════════════════════════════════════════════════════════════ */
+    // estadisticas
     function actualizarEstadisticas() {
         statUsuarios.textContent    = todosLosUsuarios.length;
         statCargadores.textContent  = todosLosCargadores.length;
@@ -144,9 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statIncidencias.textContent = todasLasNotificaciones.filter(n => n.leida === 0).length;
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       USUARIOS
-    ════════════════════════════════════════════════════════════ */
+    //Usuarios:
     async function cargarUsuarios() {
         try {
             todosLosUsuarios = await obtenerUsuarios();
@@ -284,9 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /* ═══════════════════════════════════════════════════════════
-       CARGADORES
-    ════════════════════════════════════════════════════════════ */
+    // Cargadores:
     async function cargarCargadores() {
         try {
             todosLosCargadores = await obtenerCargadores();
@@ -431,9 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /* ═══════════════════════════════════════════════════════════
-       RESERVAS
-    ════════════════════════════════════════════════════════════ */
+    // Reservas:
     async function cargarReservas() {
         try {
             todasLasReservas = await obtenerReservas();
@@ -490,9 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
     buscarReserva.addEventListener('input',       aplicarFiltrosReservas);
     filtroEstadoReserva.addEventListener('change', aplicarFiltrosReservas);
 
-    /* ═══════════════════════════════════════════════════════════
-       FAVORITOS
-    ════════════════════════════════════════════════════════════ */
+    // Favoritos:
     async function cargarFavoritos() {
         try {
             todosLosFavoritos = await obtenerFavoritos();
@@ -542,9 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buscarFavorito.addEventListener('input', aplicarFiltrosFavoritos);
 
-    /* ═══════════════════════════════════════════════════════════
-       SESIONES
-    ════════════════════════════════════════════════════════════ */
+    // Sesiones:
     async function cargarSesiones() {
         try {
             todasLasSesiones = await obtenerSesiones();
@@ -598,9 +569,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buscarSesion.addEventListener('input', aplicarFiltrosSesiones);
 
-    /* ═══════════════════════════════════════════════════════════
-       NOTIFICACIONES
-    ════════════════════════════════════════════════════════════ */
+    // Notificaciones:
     async function cargarNotificaciones() {
         try {
             todasLasNotificaciones = await obtenerNotificaciones();
@@ -665,9 +634,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    /* ═══════════════════════════════════════════════════════════
-       UTILIDADES
-    ════════════════════════════════════════════════════════════ */
     function etiquetaTipo(tipo) {
         const etiquetas = { rapido: 'Carga rápida', estandar: 'Carga estándar', compatible: 'Carga lenta' };
         return etiquetas[tipo] || tipo;

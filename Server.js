@@ -1,3 +1,5 @@
+// Servidor principal de la aplicación. Configura Express, registra rutas, maneja errores y también inicia el servidor WebSocket para las notificaciones en tiempo real.
+
 'use strict';
 
 const express  = require('express');

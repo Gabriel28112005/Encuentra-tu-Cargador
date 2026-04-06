@@ -1,21 +1,12 @@
-/**
- * Api.js
- * Cliente HTTP centralizado para todas las llamadas a la API REST.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+// Cliente HTTP centralizado para todas las llamadas a la API REST.
 
 'use strict';
 
-// ═══════════════════════════════════════════════════════════
-// CONFIGURACIÓN BASE
-// ═══════════════════════════════════════════════════════════
+// Configuracion base
 const URL_BASE = 'http://localhost:3000/api';
 
-// ═══════════════════════════════════════════════════════════
-// FUNCIÓN AUXILIAR — OBTENER CABECERAS DE AUTENTICACIÓN
-// Incluye el token JWT en todas las peticiones protegidas
-// ═══════════════════════════════════════════════════════════
+// Función para obtener las cabeceras de autenticación (incluyendo el JWT)
+
 function obtenerCabeceras() {
     const token = localStorage.getItem('token');
     return {
@@ -24,10 +15,8 @@ function obtenerCabeceras() {
     };
 }
 
-// ═══════════════════════════════════════════════════════════
-// FUNCIÓN AUXILIAR — MANEJAR RESPUESTA
-// Comprueba si la respuesta es correcta y la devuelve en JSON
-// ═══════════════════════════════════════════════════════════
+// Función para manejar la respuesta de las peticiones fetch. Comprueba si la respuesta es correcta y la devuelve en JSON, o lanza un error con el mensaje del servidor.
+
 async function manejarRespuesta(respuesta) {
     const datos = await respuesta.json();
     if (!respuesta.ok) {
@@ -36,9 +25,7 @@ async function manejarRespuesta(respuesta) {
     return datos;
 }
 
-// ═══════════════════════════════════════════════════════════
-// AUTENTICACIÓN
-// ═══════════════════════════════════════════════════════════
+// Autentificación:
 
 /**
  * Inicia sesión con las credenciales del usuario.
@@ -47,6 +34,7 @@ async function manejarRespuesta(respuesta) {
  * @param {string} tipoDispositivo
  * @returns {Promise} Token JWT, rol y nombreUsuario
  */
+
 async function login(nombreUsuario, contrasena, tipoDispositivo) {
     const respuesta = await fetch(`${URL_BASE}/login`, {
         method:  'POST',
@@ -60,6 +48,7 @@ async function login(nombreUsuario, contrasena, tipoDispositivo) {
  * Cierra la sesión del usuario.
  * @returns {Promise}
  */
+
 async function logout() {
     const respuesta = await fetch(`${URL_BASE}/logout`, {
         method:  'POST',
@@ -68,14 +57,13 @@ async function logout() {
     return manejarRespuesta(respuesta);
 }
 
-// ═══════════════════════════════════════════════════════════
-// CARGADORES
-// ═══════════════════════════════════════════════════════════
+// Cargadores
 
 /**
  * Obtiene la lista de todos los cargadores.
  * @returns {Promise} Array de cargadores
  */
+
 async function obtenerCargadores() {
     const respuesta = await fetch(`${URL_BASE}/cargadores`, {
         headers: obtenerCabeceras()
@@ -88,6 +76,7 @@ async function obtenerCargadores() {
  * @param {number} id
  * @returns {Promise} Datos del cargador
  */
+
 async function obtenerCargador(id) {
     const respuesta = await fetch(`${URL_BASE}/cargadores/${id}`, {
         headers: obtenerCabeceras()
@@ -100,6 +89,7 @@ async function obtenerCargador(id) {
  * @param {Object} datos
  * @returns {Promise}
  */
+
 async function crearCargador(datos) {
     const respuesta = await fetch(`${URL_BASE}/cargadores`, {
         method:  'POST',
@@ -115,6 +105,7 @@ async function crearCargador(datos) {
  * @param {Object} datos
  * @returns {Promise}
  */
+
 async function actualizarCargador(id, datos) {
     const respuesta = await fetch(`${URL_BASE}/cargadores/${id}`, {
         method:  'PUT',
@@ -129,6 +120,7 @@ async function actualizarCargador(id, datos) {
  * @param {number} id
  * @returns {Promise}
  */
+
 async function eliminarCargador(id) {
     const respuesta = await fetch(`${URL_BASE}/cargadores/${id}`, {
         method:  'DELETE',
@@ -137,15 +129,14 @@ async function eliminarCargador(id) {
     return manejarRespuesta(respuesta);
 }
 
-// ═══════════════════════════════════════════════════════════
-// RESERVAS
-// ═══════════════════════════════════════════════════════════
+// Reservas
 
 /**
  * Obtiene las reservas del usuario autenticado.
  * Administrador y técnico obtienen todas las reservas.
  * @returns {Promise} Array de reservas
  */
+
 async function obtenerReservas() {
     const respuesta = await fetch(`${URL_BASE}/reservas`, {
         headers: obtenerCabeceras()
@@ -158,6 +149,7 @@ async function obtenerReservas() {
  * @param {number} idCargador
  * @returns {Promise}
  */
+
 async function crearReserva(idCargador) {
     const respuesta = await fetch(`${URL_BASE}/reservas`, {
         method:  'POST',
@@ -172,6 +164,7 @@ async function crearReserva(idCargador) {
  * @param {number} id
  * @returns {Promise}
  */
+
 async function cancelarReserva(id) {
     const respuesta = await fetch(`${URL_BASE}/reservas/${id}`, {
         method:  'DELETE',
@@ -180,14 +173,13 @@ async function cancelarReserva(id) {
     return manejarRespuesta(respuesta);
 }
 
-// ═══════════════════════════════════════════════════════════
-// FAVORITOS
-// ═══════════════════════════════════════════════════════════
+// Favoritos
 
 /**
  * Obtiene los cargadores favoritos del usuario autenticado.
  * @returns {Promise} Array de favoritos
  */
+
 async function obtenerFavoritos() {
     const respuesta = await fetch(`${URL_BASE}/favoritos`, {
         headers: obtenerCabeceras()
@@ -200,6 +192,7 @@ async function obtenerFavoritos() {
  * @param {number} idCargador
  * @returns {Promise}
  */
+
 async function añadirFavorito(idCargador) {
     const respuesta = await fetch(`${URL_BASE}/favoritos`, {
         method:  'POST',
@@ -214,6 +207,7 @@ async function añadirFavorito(idCargador) {
  * @param {number} idCargador
  * @returns {Promise}
  */
+
 async function eliminarFavorito(idCargador) {
     const respuesta = await fetch(`${URL_BASE}/favoritos/${idCargador}`, {
         method:  'DELETE',
@@ -222,14 +216,13 @@ async function eliminarFavorito(idCargador) {
     return manejarRespuesta(respuesta);
 }
 
-// ═══════════════════════════════════════════════════════════
-// NOTIFICACIONES
-// ═══════════════════════════════════════════════════════════
+// Notificaciones
 
 /**
  * Obtiene las notificaciones (administrador y técnico).
  * @returns {Promise} Array de notificaciones
  */
+
 async function obtenerNotificaciones() {
     const respuesta = await fetch(`${URL_BASE}/notificaciones`, {
         headers: obtenerCabeceras()
@@ -243,6 +236,7 @@ async function obtenerNotificaciones() {
  * @param {string} mensaje
  * @returns {Promise}
  */
+
 async function reportarIncidencia(idCargador, mensaje) {
     const respuesta = await fetch(`${URL_BASE}/notificaciones`, {
         method:  'POST',
@@ -257,6 +251,7 @@ async function reportarIncidencia(idCargador, mensaje) {
  * @param {number} id
  * @returns {Promise}
  */
+
 async function marcarNotificacionLeida(id) {
     const respuesta = await fetch(`${URL_BASE}/notificaciones/${id}/leida`, {
         method:  'PUT',
@@ -265,14 +260,13 @@ async function marcarNotificacionLeida(id) {
     return manejarRespuesta(respuesta);
 }
 
-// ═══════════════════════════════════════════════════════════
-// USUARIOS (solo administrador)
-// ═══════════════════════════════════════════════════════════
+// Usuarios (solo administrador)
 
 /**
  * Obtiene la lista de todos los usuarios.
  * @returns {Promise} Array de usuarios
  */
+
 async function obtenerUsuarios() {
     const respuesta = await fetch(`${URL_BASE}/usuarios`, {
         headers: obtenerCabeceras()
@@ -285,6 +279,7 @@ async function obtenerUsuarios() {
  * @param {Object} datos
  * @returns {Promise}
  */
+
 async function crearUsuario(datos) {
     const respuesta = await fetch(`${URL_BASE}/usuarios`, {
         method:  'POST',
@@ -300,6 +295,7 @@ async function crearUsuario(datos) {
  * @param {Object} datos
  * @returns {Promise}
  */
+
 async function actualizarUsuario(id, datos) {
     const respuesta = await fetch(`${URL_BASE}/usuarios/${id}`, {
         method:  'PUT',
@@ -314,6 +310,7 @@ async function actualizarUsuario(id, datos) {
  * @param {number} id
  * @returns {Promise}
  */
+
 async function eliminarUsuario(id) {
     const respuesta = await fetch(`${URL_BASE}/usuarios/${id}`, {
         method:  'DELETE',
@@ -322,14 +319,13 @@ async function eliminarUsuario(id) {
     return manejarRespuesta(respuesta);
 }
 
-// ═══════════════════════════════════════════════════════════
-// SESIONES (solo administrador)
-// ═══════════════════════════════════════════════════════════
+// Sesiones (solo administrador)
 
 /**
  * Obtiene el log completo de sesiones.
  * @returns {Promise} Array de sesiones
  */
+
 async function obtenerSesiones() {
     const respuesta = await fetch(`${URL_BASE}/sesiones`, {
         headers: obtenerCabeceras()
@@ -337,14 +333,13 @@ async function obtenerSesiones() {
     return manejarRespuesta(respuesta);
 }
 
-// ═══════════════════════════════════════════════════════════
-// DATOS USUARIO
-// ═══════════════════════════════════════════════════════════
+// Datos usuario
 
 /**
  * Obtiene los datos del perfil del usuario autenticado.
  * @returns {Promise} nombre, apellido y nombreUsuario
  */
+
 async function obtenerDatosUsuario() {
     const respuesta = await fetch(`${URL_BASE}/datosusuario`, {
         headers: obtenerCabeceras()
@@ -358,6 +353,7 @@ async function obtenerDatosUsuario() {
  * @param {string} contrasenaNueva
  * @returns {Promise}
  */
+
 async function cambiarContrasena(contrasenaActual, contrasenaNueva) {
     const respuesta = await fetch(`${URL_BASE}/datosusuario/contrasena`, {
         method:  'PUT',

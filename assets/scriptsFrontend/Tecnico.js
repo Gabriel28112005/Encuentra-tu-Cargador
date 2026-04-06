@@ -1,18 +1,9 @@
-/**
- * Tecnico.js
- * Lógica del panel de técnico.
- * Gestiona cargadores e incidencias.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+//Lógica del panel de técnico. Se configura la gestión de cargadores e incidencias.
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    /* ═══════════════════════════════════════════════════════════
-       REFERENCIAS AL DOM
-    ════════════════════════════════════════════════════════════ */
     const textoUsuario          = document.getElementById('textoUsuario');
     const nombreBienvenida      = document.getElementById('nombreBienvenida');
     const statCargadores        = document.getElementById('statCargadores');
@@ -33,15 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonCancelarEstado   = document.getElementById('botonCancelarEstado');
     const botonGuardarEstado    = document.getElementById('botonGuardarEstado');
 
-    /* ═══════════════════════════════════════════════════════════
-       ESTADO
-    ════════════════════════════════════════════════════════════ */
     let todosLosCargadores     = [];
     let todasLasIncidencias    = [];
 
-    /* ═══════════════════════════════════════════════════════════
-       INICIALIZACIÓN
-    ════════════════════════════════════════════════════════════ */
     const nombreUsuario = localStorage.getItem('nombreUsuario');
     const rol           = localStorage.getItem('rol');
     const badgeRol      = document.querySelector('.badge-rol');
@@ -57,17 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cargarTodo();
 
-    /* ═══════════════════════════════════════════════════════════
-       NAVEGACIÓN — SCROLL A SECCIÓN
-    ════════════════════════════════════════════════════════════ */
+    // Función para navegar a una sección del panel (usada en el dashboard)
     window.irA = function(idSeccion) {
         const seccion = document.getElementById(idSeccion);
         if (seccion) seccion.scrollIntoView({ behavior: 'smooth' });
     };
 
-    /* ═══════════════════════════════════════════════════════════
-       CARGAR TODO AL INICIAR
-    ════════════════════════════════════════════════════════════ */
+    // Función para cargar tanto los cargadores como las incidencias al iniciar la página
     async function cargarTodo() {
         await Promise.all([
             cargarCargadores(),
@@ -76,9 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         actualizarEstadisticas();
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       ESTADÍSTICAS
-    ════════════════════════════════════════════════════════════ */
+    // Función para actualizar las estadísticas de los cargadores
     function actualizarEstadisticas() {
         statCargadores.textContent  = todosLosCargadores.length;
         statLibres.textContent      = todosLosCargadores.filter(c => c.estado === 'libre').length;
@@ -86,9 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statIncidencias.textContent = todasLasIncidencias.filter(n => n.leida === 0).length;
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       CARGADORES
-    ════════════════════════════════════════════════════════════ */
+    // Función para cargar y mostrar los cargadores
     async function cargarCargadores() {
         try {
             todosLosCargadores = await obtenerCargadores();
@@ -97,6 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
             contenedorCargadores.innerHTML = '<p class="texto-vacio">Error al cargar cargadores.</p>';
         }
     }
+
+    // Funciones para el filtrado de los cargadores según su nombre, dirección, tipo y estado:
 
     function renderizarCargadores(cargadores) {
         if (cargadores.length === 0) {
@@ -154,9 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
     filtroTipoCargador.addEventListener('change',   aplicarFiltrosCargadores);
     filtroEstadoCargador.addEventListener('change', aplicarFiltrosCargadores);
 
-    /* ═══════════════════════════════════════════════════════════
-       MODAL — ACTUALIZAR ESTADO CARGADOR
-    ════════════════════════════════════════════════════════════ */
+    // Configuraciones para el modal que permite actualizar el estado del cargador. Este se abre al hacer click en el botón de "Actualizar estado" de cada cargador, y permite cambiar su estado entre libre, ocupado o en reparación.
+    
     window.abrirModalEstado = function(id) {
         const cargador = todosLosCargadores.find(c => c.id === id);
         if (!cargador) return;
@@ -190,9 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /* ═══════════════════════════════════════════════════════════
-       INCIDENCIAS
-    ════════════════════════════════════════════════════════════ */
+    //Configuraciones para la gestión de incidencias. Se muestra una tabla con las incidencias reportadas por los usuarios, permitiendo filtrarlas por si están leídas o no, y marcarlas como leídas para que el usuario que las reportó deje de recibir notificaciones sobre ellas.
     async function cargarIncidencias() {
         try {
             todasLasIncidencias = await obtenerNotificaciones();
@@ -257,9 +233,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    /* ═══════════════════════════════════════════════════════════
-       UTILIDADES
-    ════════════════════════════════════════════════════════════ */
     function etiquetaTipo(tipo) {
         const etiquetas = { rapido: 'Carga rápida', estandar: 'Carga estándar', compatible: 'Carga lenta' };
         return etiquetas[tipo] || tipo;

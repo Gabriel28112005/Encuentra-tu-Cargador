@@ -1,37 +1,23 @@
-/**
- * RutasProtegidas.js
- * Protección de páginas según token y rol almacenado en localStorage.
- * Este script debe incluirse en todas las páginas HTML protegidas.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+//Protección de páginas según token y rol almacenado en el localStorage. Se incluye en todas las páginas protegidas para verificar que el usuario tiene acceso a ellas
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ═══════════════════════════════════════════════════════════
-    // OBTENER DATOS DE SESIÓN DEL LOCALSTORAGE
-    // ═══════════════════════════════════════════════════════════
+    // Obtención de datos de sesión de localStorage
+
     const token    = localStorage.getItem('token');
     const rol      = localStorage.getItem('rol');
     const latitud  = localStorage.getItem('latitud');
     const longitud = localStorage.getItem('longitud');
 
-    // ═══════════════════════════════════════════════════════════
-    // COMPROBAR QUE HAY SESIÓN ACTIVA
-    // Si no hay token o rol, redirigir al login
-    // ═══════════════════════════════════════════════════════════
+    // Comprobación de si la sesión está activada. En caso de que no haya token o rol, se redirige al login
     if (!token || !rol) {
         window.location.href = '../Index.html';
         return;
     }
 
-    // ═══════════════════════════════════════════════════════════
-    // COMPROBAR QUE EL ROL TIENE ACCESO A ESTA PÁGINA
-    // Se obtiene el rol permitido del atributo data-rol del body
-    // Ejemplo: <body data-rol="administrador">
-    // ═══════════════════════════════════════════════════════════
+    // Comprobación de que el rol tiene acceso a la ruta (se obtiene el rol que está permitido desde el atributo data-rol del body)
     const rolRequerido = document.body.getAttribute('data-rol');
 
     if (rolRequerido && rol !== rolRequerido) {
@@ -40,9 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // ═══════════════════════════════════════════════════════════
-    // COMPROBAR QUE HAY GEOLOCALIZACIÓN (solo para Mapa.html)
-    // ═══════════════════════════════════════════════════════════
+    
+    // Comprobación de que hay geolocalización (solo para Mapa.html)
     const requiereGeo = document.body.getAttribute('data-geo');
 
     if (requiereGeo === 'true' && (!latitud || !longitud)) {
@@ -50,9 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // ═══════════════════════════════════════════════════════════
-    // FUNCIÓN AUXILIAR — REDIRIGIR SEGÚN ROL
-    // ═══════════════════════════════════════════════════════════
+    // Función que redirige según el rol del usuario
     function redirigirSegunRol(rolUsuario) {
         switch (rolUsuario) {
             case 'administrador':
@@ -67,10 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ═══════════════════════════════════════════════════════════
-    // FUNCIÓN GLOBAL — CERRAR SESIÓN
-    // Disponible en todas las páginas que incluyan este script
-    // ═══════════════════════════════════════════════════════════
+    
+    // Función de cierre de sesión
     window.cerrarSesion = async function () {
         try {
             await fetch('http://localhost:3000/api/logout', {

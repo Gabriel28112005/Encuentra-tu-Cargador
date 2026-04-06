@@ -1,10 +1,4 @@
-/**
- * Notificaciones.js
- * Gestión de notificaciones en tiempo real mediante WebSockets.
- * Se incluye en todas las páginas que necesiten recibir notificaciones.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+ // Gestión de notificaciones en tiempo real mediante WebSockets. Se incluye en todas las páginas que necesiten recibir notificaciones.
 
 'use strict';
 
@@ -15,11 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!rol || !nombreUsuario) return;
 
-    /* ═══════════════════════════════════════════════════════════
-       CONEXIÓN WEBSOCKET
-       Se conecta al servidor pasando el rol como parámetro
-       para que el servidor registre al cliente en el grupo correcto.
-    ════════════════════════════════════════════════════════════ */
+    // Conexión WebSocket: Se conecta al servidor pasando el rol como parámetro para que el servidor registre al cliente en el grupo correcto.
     const ws = new WebSocket(`ws://localhost:3000?rol=${rol}`);
 
     ws.addEventListener('open', () => {
@@ -43,9 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Error en WebSocket:', error);
     });
 
-    /* ═══════════════════════════════════════════════════════════
-       MANEJAR NOTIFICACIÓN RECIBIDA
-    ════════════════════════════════════════════════════════════ */
+    // Manejo de notificación recibida 
     function manejarNotificacion(datos) {
         if (datos.tipo === 'incidencia') {
             mostrarToast(
@@ -56,11 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       MOSTRAR TOAST DE NOTIFICACIÓN
-       Crea un mensaje emergente en la esquina superior derecha
-       que desaparece automáticamente tras 5 segundos.
-    ════════════════════════════════════════════════════════════ */
+    // Muestra de un mensaje emergente de notificación
+       
     function mostrarToast(titulo, mensaje, tipo) {
         let contenedor = document.getElementById('contenedorToasts');
         if (!contenedor) {
