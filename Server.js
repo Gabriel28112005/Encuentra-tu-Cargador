@@ -9,11 +9,9 @@ const path     = require('path');
 const http     = require('http');
 
 // Cargar variables de entorno
-
 dotenv.config({ path: path.join(__dirname, '.env') });
 
 // Importación de rutas
-
 const autentificacionRutas = require('./assets/scriptsBackend/rutas/AutentificacionRutas');
 const usuariosRutas        = require('./assets/scriptsBackend/rutas/Usuarios');
 const cargadoresRutas      = require('./assets/scriptsBackend/rutas/Cargadores');
@@ -23,13 +21,13 @@ const notificacionesRutas  = require('./assets/scriptsBackend/rutas/Notificacion
 const sesionesRutas        = require('./assets/scriptsBackend/rutas/Sesiones');
 const datosUsuarioRutas    = require('./assets/scriptsBackend/rutas/DatosUsuario');
 
-// Importación Websocket 
-
+// Importación WebSocket
 const { iniciarWebSocket } = require('./assets/scriptsBackend/WebSocket');
 
+// Importación de jobs programados
+const { iniciarJobs } = require('./assets/scriptsBackend/Jobs');
 
 // Configuración de Express
-
 const app = express();
 
 // Middleware para parsear JSON en las peticiones
@@ -42,9 +40,7 @@ app.use(cors());
 // Esto permite que el navegador acceda a los HTML, CSS y JS
 app.use(express.static(path.join(__dirname)));
 
-
 // Registro de rutas desde la Api
-
 app.use('/api', autentificacionRutas);
 app.use('/api', usuariosRutas);
 app.use('/api', cargadoresRutas);
@@ -54,37 +50,30 @@ app.use('/api', notificacionesRutas);
 app.use('/api', sesionesRutas);
 app.use('/api', datosUsuarioRutas);
 
-
 // Ruta principal: Servir Index.html
-
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'Index.html'));
 });
 
-
 // Control de rutas no encontradas (404)
-
 app.use((req, res) => {
     res.status(404).json({ mensaje: 'Ruta no encontrada.' });
 });
 
-
 // Control de errores internos (500)
-
 app.use((error, req, res, next) => {
     console.error('Error interno del servidor:', error.message);
     res.status(500).json({ mensaje: 'Error interno del servidor.' });
 });
 
-
 // Creación del servidor HTTP a partir de la aplicación Express y luego iniciar el WebSocket en ese mismo servidor para compartir el puerto.
-
 const servidor = http.createServer(app);
 iniciarWebSocket(servidor);
 
+// Inicio de los jobs programados
+iniciarJobs();
 
 // Uso del servidor
-
 const PUERTO = process.env.PORT || 3000;
 
 servidor.listen(PUERTO, () => {

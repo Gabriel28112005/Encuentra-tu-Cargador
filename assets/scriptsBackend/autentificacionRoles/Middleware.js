@@ -1,9 +1,4 @@
-/**
- * Middleware.js
- * Validación de tokens JWT y control de roles.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+// Validación de tokens JWT y control de roles para rutas protegidas en el backend
 
 'use strict';
 
@@ -14,11 +9,7 @@ const path   = require('path');
 // Cargar variables de entorno desde la raíz del proyecto
 dotenv.config({ path: path.join(__dirname, '..', '..', '..', '.env') });
 
-// ═══════════════════════════════════════════════════════════
-// MIDDLEWARE — VERIFICAR TOKEN JWT
-// Se ejecuta antes de cualquier ruta protegida.
-// Comprueba que el token existe, es válido y no ha expirado.
-// ═══════════════════════════════════════════════════════════
+// Verificación del token JWT y control de roles para rutas protegidas. Se ejecuta antes de acceder a cualquier ruta que requiera autenticación o autorización específica. Se comprueba que el token existe, es válido y no ha expirado.
 function verificarToken(req, res, next) {
     const cabecera = req.headers['authorization'];
 
@@ -27,7 +18,7 @@ function verificarToken(req, res, next) {
         return res.status(401).json({ mensaje: 'Acceso denegado. No se ha proporcionado un token.' });
     }
 
-    // El token llega con el formato "Bearer <token>", extraemos solo el token
+    // El token llega con el formato "Bearer <token>", por lo que se extrae solo el token
     const token = cabecera.split(' ')[1];
 
     if (!token) {
@@ -49,12 +40,8 @@ function verificarToken(req, res, next) {
     }
 }
 
-// ═══════════════════════════════════════════════════════════
-// MIDDLEWARE — VERIFICAR ROL
-// Se ejecuta después de verificarToken.
-// Comprueba que el usuario tiene el rol necesario para
-// acceder a la ruta solicitada.
-// ═══════════════════════════════════════════════════════════
+// Se verifica que el usuario tiene el rol necesario para acceder a la ruta solicitada. Se ejecuta después de la función "verificarToken"
+
 function verificarRol(...rolesPermitidos) {
     return (req, res, next) => {
         const rolUsuario = req.usuario.rol;

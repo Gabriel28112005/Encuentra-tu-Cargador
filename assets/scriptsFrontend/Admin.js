@@ -3,7 +3,7 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     const textoUsuario       = document.getElementById('textoUsuario');
     const nombreBienvenida   = document.getElementById('nombreBienvenida');
     const statUsuarios       = document.getElementById('statUsuarios');
@@ -42,44 +42,55 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtroLeidaNotificacion = document.getElementById('filtroLeidaNotificacion');
 
     // Modal usuario
-    const fondoModalUsuario      = document.getElementById('fondoModalUsuario');
-    const tituloModalUsuario     = document.getElementById('tituloModalUsuario');
-    const idUsuarioEditar        = document.getElementById('idUsuarioEditar');
-    const modalNombreUsuario     = document.getElementById('modalNombreUsuario');
-    const modalApellidoUsuario   = document.getElementById('modalApellidoUsuario');
-    const modalNombreUsuarioInput= document.getElementById('modalNombreUsuarioInput');
-    const modalContrasenaUsuario = document.getElementById('modalContrasenaUsuario');
-    const modalRolUsuario        = document.getElementById('modalRolUsuario');
-    const mensajeModalUsuario    = document.getElementById('mensajeModalUsuario');
-    const grupoContrasenaModal   = document.getElementById('grupoContrasenaModal');
-    const botonNuevoUsuario      = document.getElementById('botonNuevoUsuario');
-    const botonCancelarUsuario   = document.getElementById('botonCancelarUsuario');
-    const botonGuardarUsuario    = document.getElementById('botonGuardarUsuario');
+    const fondoModalUsuario       = document.getElementById('fondoModalUsuario');
+    const tituloModalUsuario      = document.getElementById('tituloModalUsuario');
+    const idUsuarioEditar         = document.getElementById('idUsuarioEditar');
+    const modalNombreUsuario      = document.getElementById('modalNombreUsuario');
+    const modalApellidoUsuario    = document.getElementById('modalApellidoUsuario');
+    const modalNombreUsuarioInput = document.getElementById('modalNombreUsuarioInput');
+    const modalContrasenaUsuario  = document.getElementById('modalContrasenaUsuario');
+    const modalRolUsuario         = document.getElementById('modalRolUsuario');
+    const mensajeModalUsuario     = document.getElementById('mensajeModalUsuario');
+    const grupoContrasenaModal    = document.getElementById('grupoContrasenaModal');
+    const botonNuevoUsuario       = document.getElementById('botonNuevoUsuario');
+    const botonCancelarUsuario    = document.getElementById('botonCancelarUsuario');
+    const botonGuardarUsuario     = document.getElementById('botonGuardarUsuario');
 
     // Modal cargador
-    const fondoModalCargador      = document.getElementById('fondoModalCargador');
-    const tituloModalCargador     = document.getElementById('tituloModalCargador');
-    const idCargadorEditar        = document.getElementById('idCargadorEditar');
-    const modalNombreCargador     = document.getElementById('modalNombreCargador');
-    const modalDireccionCargador  = document.getElementById('modalDireccionCargador');
-    const modalLatitudCargador    = document.getElementById('modalLatitudCargador');
-    const modalLongitudCargador   = document.getElementById('modalLongitudCargador');
-    const modalTipoCargador       = document.getElementById('modalTipoCargador');
-    const modalEstadoCargador     = document.getElementById('modalEstadoCargador');
-    const modalTiempoCargador     = document.getElementById('modalTiempoCargador');
-    const modalCosteCargador      = document.getElementById('modalCosteCargador');
-    const mensajeModalCargador    = document.getElementById('mensajeModalCargador');
-    const botonNuevoCargador      = document.getElementById('botonNuevoCargador');
-    const botonCancelarCargador   = document.getElementById('botonCancelarCargador');
-    const botonGuardarCargador    = document.getElementById('botonGuardarCargador');
+    const fondoModalCargador     = document.getElementById('fondoModalCargador');
+    const tituloModalCargador    = document.getElementById('tituloModalCargador');
+    const idCargadorEditar       = document.getElementById('idCargadorEditar');
+    const modalNombreCargador    = document.getElementById('modalNombreCargador');
+    const modalDireccionCargador = document.getElementById('modalDireccionCargador');
+    const modalLatitudCargador   = document.getElementById('modalLatitudCargador');
+    const modalLongitudCargador  = document.getElementById('modalLongitudCargador');
+    const modalTipoCargador      = document.getElementById('modalTipoCargador');
+    const modalEstadoCargador    = document.getElementById('modalEstadoCargador');
+    const modalTiempoCargador    = document.getElementById('modalTiempoCargador');
+    const modalCosteCargador     = document.getElementById('modalCosteCargador');
+    const mensajeModalCargador   = document.getElementById('mensajeModalCargador');
+    const botonNuevoCargador     = document.getElementById('botonNuevoCargador');
+    const botonCancelarCargador  = document.getElementById('botonCancelarCargador');
+    const botonGuardarCargador   = document.getElementById('botonGuardarCargador');
 
-    
     let todosLosUsuarios       = [];
     let todosLosCargadores     = [];
     let todasLasReservas       = [];
     let todosLosFavoritos      = [];
     let todasLasSesiones       = [];
     let todasLasNotificaciones = [];
+
+    // Páginas actuales de cada sección
+    const paginas = {
+        usuarios:       1,
+        cargadores:     1,
+        reservas:       1,
+        favoritos:      1,
+        sesiones:       1,
+        notificaciones: 1
+    };
+
+    const ELEMENTOS_POR_PAGINA = 10;
 
     const nombreUsuario = localStorage.getItem('nombreUsuario');
     const rol           = localStorage.getItem('rol');
@@ -99,9 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Scroll a la selección al hacer clic
     window.irA = function(idSeccion) {
         const seccion = document.getElementById(idSeccion);
-        if (seccion) {
-            seccion.scrollIntoView({ behavior: 'smooth' });
-        }
+        if (seccion) seccion.scrollIntoView({ behavior: 'smooth' });
     };
 
     // Cargar todo al iniciar
@@ -117,12 +126,34 @@ document.addEventListener('DOMContentLoaded', () => {
         actualizarEstadisticas();
     }
 
-    // estadisticas
+    // Estadísticas
     function actualizarEstadisticas() {
         statUsuarios.textContent    = todosLosUsuarios.length;
         statCargadores.textContent  = todosLosCargadores.length;
         statReservas.textContent    = todasLasReservas.length;
         statIncidencias.textContent = todasLasNotificaciones.filter(n => n.leida === 0).length;
+    }
+
+    // Función auxiliar que genera el HTML de paginación estilo Gmail
+    function crearPaginacion(total, paginaActual, onAnterior, onSiguiente) {
+        const inicio = Math.min((paginaActual - 1) * ELEMENTOS_POR_PAGINA + 1, total);
+        const fin    = Math.min(paginaActual * ELEMENTOS_POR_PAGINA, total);
+        const div    = document.createElement('div');
+        div.className = 'paginacion';
+        div.innerHTML = `
+            <span class="paginacion-info">${inicio}–${fin} de ${total}</span>
+            <button class="paginacion-boton" id="btnAnterior" ${paginaActual === 1 ? 'disabled' : ''}>&#8249;</button>
+            <button class="paginacion-boton" id="btnSiguiente" ${fin >= total ? 'disabled' : ''}>&#8250;</button>
+        `;
+        div.querySelector('#btnAnterior').addEventListener('click', onAnterior);
+        div.querySelector('#btnSiguiente').addEventListener('click', onSiguiente);
+        return div;
+    }
+
+    // Función auxiliar que pagina un array
+    function paginar(array, pagina) {
+        const inicio = (pagina - 1) * ELEMENTOS_POR_PAGINA;
+        return array.slice(inicio, inicio + ELEMENTOS_POR_PAGINA);
     }
 
     //Usuarios:
@@ -141,6 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const paginados = paginar(usuarios, paginas.usuarios);
+
         let html = `<table class="tabla-admin">
             <thead><tr>
                 <th>Nombre de usuario</th>
@@ -151,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <th>Acciones</th>
             </tr></thead><tbody>`;
 
-        usuarios.forEach(u => {
+        paginados.forEach(u => {
             const fecha = new Date(u.timestamp).toLocaleDateString('es-ES');
             html += `<tr>
                 <td>${u.nombreUsuario}</td>
@@ -168,20 +201,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         html += '</tbody></table>';
         contenedorUsuarios.innerHTML = html;
+
+        contenedorUsuarios.appendChild(crearPaginacion(
+            usuarios.length,
+            paginas.usuarios,
+            () => { paginas.usuarios--; renderizarUsuarios(usuarios); },
+            () => { paginas.usuarios++; renderizarUsuarios(usuarios); }
+        ));
     }
 
     function aplicarFiltrosUsuarios() {
-        const busqueda = buscarUsuario.value.trim().toLowerCase();
-        const rol      = filtroRolUsuario.value;
+        paginas.usuarios = 1;
+        const busqueda  = buscarUsuario.value.trim().toLowerCase();
+        const rol       = filtroRolUsuario.value;
         const filtrados = todosLosUsuarios.filter(u => {
             const coincideNombre = !busqueda || u.nombreUsuario.toLowerCase().includes(busqueda) || u.nombre.toLowerCase().includes(busqueda);
-            const coincideRol    = !rol      || u.rol === rol;
+            const coincideRol   = !rol      || u.rol === rol;
             return coincideNombre && coincideRol;
         });
         renderizarUsuarios(filtrados);
     }
 
-    buscarUsuario.addEventListener('input',    aplicarFiltrosUsuarios);
+    buscarUsuario.addEventListener('input',     aplicarFiltrosUsuarios);
     filtroRolUsuario.addEventListener('change', aplicarFiltrosUsuarios);
 
     // Nuevo usuario
@@ -228,8 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     botonGuardarUsuario.addEventListener('click', async () => {
-        const id       = idUsuarioEditar.value;
-        const datos    = {
+        const id    = idUsuarioEditar.value;
+        const datos = {
             nombre:        modalNombreUsuario.value.trim(),
             apellido:      modalApellidoUsuario.value.trim(),
             nombreUsuario: modalNombreUsuarioInput.value.trim(),
@@ -279,6 +320,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const paginados = paginar(cargadores, paginas.cargadores);
+
         let html = `<table class="tabla-admin">
             <thead><tr>
                 <th>Nombre</th>
@@ -290,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <th>Acciones</th>
             </tr></thead><tbody>`;
 
-        cargadores.forEach(c => {
+        paginados.forEach(c => {
             html += `<tr>
                 <td>${c.nombre}</td>
                 <td>${c.direccion}</td>
@@ -307,12 +350,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         html += '</tbody></table>';
         contenedorCargadores.innerHTML = html;
+
+        contenedorCargadores.appendChild(crearPaginacion(
+            cargadores.length,
+            paginas.cargadores,
+            () => { paginas.cargadores--; renderizarCargadores(cargadores); },
+            () => { paginas.cargadores++; renderizarCargadores(cargadores); }
+        ));
     }
 
     function aplicarFiltrosCargadores() {
-        const busqueda = buscarCargador.value.trim().toLowerCase();
-        const tipo     = filtroTipoCargador.value;
-        const estado   = filtroEstadoCargador.value;
+        paginas.cargadores = 1;
+        const busqueda  = buscarCargador.value.trim().toLowerCase();
+        const tipo      = filtroTipoCargador.value;
+        const estado    = filtroEstadoCargador.value;
         const filtrados = todosLosCargadores.filter(c => {
             const coincideNombre = !busqueda || c.nombre.toLowerCase().includes(busqueda) || c.direccion.toLowerCase().includes(busqueda);
             const coincideTipo   = !tipo     || c.tipo   === tipo;
@@ -327,16 +378,16 @@ document.addEventListener('DOMContentLoaded', () => {
     filtroEstadoCargador.addEventListener('change', aplicarFiltrosCargadores);
 
     botonNuevoCargador.addEventListener('click', () => {
-        tituloModalCargador.textContent  = 'Nuevo cargador';
-        idCargadorEditar.value           = '';
-        modalNombreCargador.value        = '';
-        modalDireccionCargador.value     = '';
-        modalLatitudCargador.value       = '';
-        modalLongitudCargador.value      = '';
-        modalTipoCargador.value          = 'estandar';
-        modalEstadoCargador.value        = 'libre';
-        modalTiempoCargador.value        = '30';
-        modalCosteCargador.value         = '0.20';
+        tituloModalCargador.textContent = 'Nuevo cargador';
+        idCargadorEditar.value          = '';
+        modalNombreCargador.value       = '';
+        modalDireccionCargador.value    = '';
+        modalLatitudCargador.value      = '';
+        modalLongitudCargador.value     = '';
+        modalTipoCargador.value         = 'estandar';
+        modalEstadoCargador.value       = 'libre';
+        modalTiempoCargador.value       = '30';
+        modalCosteCargador.value        = '0.20';
         mensajeModalCargador.classList.add('oculto');
         fondoModalCargador.classList.remove('oculto');
     });
@@ -344,16 +395,16 @@ document.addEventListener('DOMContentLoaded', () => {
     window.editarCargador = function(id) {
         const c = todosLosCargadores.find(c => c.id === id);
         if (!c) return;
-        tituloModalCargador.textContent  = 'Editar cargador';
-        idCargadorEditar.value           = c.id;
-        modalNombreCargador.value        = c.nombre;
-        modalDireccionCargador.value     = c.direccion;
-        modalLatitudCargador.value       = c.latitud;
-        modalLongitudCargador.value      = c.longitud;
-        modalTipoCargador.value          = c.tipo;
-        modalEstadoCargador.value        = c.estado;
-        modalTiempoCargador.value        = c.tiempoEstimado;
-        modalCosteCargador.value         = c.coste;
+        tituloModalCargador.textContent = 'Editar cargador';
+        idCargadorEditar.value          = c.id;
+        modalNombreCargador.value       = c.nombre;
+        modalDireccionCargador.value    = c.direccion;
+        modalLatitudCargador.value      = c.latitud;
+        modalLongitudCargador.value     = c.longitud;
+        modalTipoCargador.value         = c.tipo;
+        modalEstadoCargador.value       = c.estado;
+        modalTiempoCargador.value       = c.tiempoEstimado;
+        modalCosteCargador.value        = c.coste;
         mensajeModalCargador.classList.add('oculto');
         fondoModalCargador.classList.remove('oculto');
     };
@@ -376,14 +427,14 @@ document.addEventListener('DOMContentLoaded', () => {
     botonGuardarCargador.addEventListener('click', async () => {
         const id    = idCargadorEditar.value;
         const datos = {
-            nombre:        modalNombreCargador.value.trim(),
-            direccion:     modalDireccionCargador.value.trim(),
-            latitud:       parseFloat(modalLatitudCargador.value),
-            longitud:      parseFloat(modalLongitudCargador.value),
-            tipo:          modalTipoCargador.value,
-            estado:        modalEstadoCargador.value,
-            tiempoEstimado:parseInt(modalTiempoCargador.value),
-            coste:         parseFloat(modalCosteCargador.value)
+            nombre:         modalNombreCargador.value.trim(),
+            direccion:      modalDireccionCargador.value.trim(),
+            latitud:        parseFloat(modalLatitudCargador.value),
+            longitud:       parseFloat(modalLongitudCargador.value),
+            tipo:           modalTipoCargador.value,
+            estado:         modalEstadoCargador.value,
+            tiempoEstimado: parseInt(modalTiempoCargador.value),
+            coste:          parseFloat(modalCosteCargador.value)
         };
 
         if (!datos.nombre || !datos.direccion || isNaN(datos.latitud) || isNaN(datos.longitud)) {
@@ -424,6 +475,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const paginadas = paginar(reservas, paginas.reservas);
+
         let html = `<table class="tabla-admin">
             <thead><tr>
                 <th>Usuario</th>
@@ -433,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <th>Estado</th>
             </tr></thead><tbody>`;
 
-        reservas.forEach(r => {
+        paginadas.forEach(r => {
             const fecha = new Date(r.fechaReserva).toLocaleDateString('es-ES', {
                 day: '2-digit', month: '2-digit', year: 'numeric',
                 hour: '2-digit', minute: '2-digit'
@@ -449,20 +502,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         html += '</tbody></table>';
         contenedorReservas.innerHTML = html;
+
+        contenedorReservas.appendChild(crearPaginacion(
+            reservas.length,
+            paginas.reservas,
+            () => { paginas.reservas--; renderizarReservas(reservas); },
+            () => { paginas.reservas++; renderizarReservas(reservas); }
+        ));
     }
 
     function aplicarFiltrosReservas() {
-        const busqueda = buscarReserva.value.trim().toLowerCase();
-        const estado   = filtroEstadoReserva.value;
+        paginas.reservas = 1;
+        const busqueda  = buscarReserva.value.trim().toLowerCase();
+        const estado    = filtroEstadoReserva.value;
         const filtradas = todasLasReservas.filter(r => {
-            const coincide = !busqueda || r.nombreUsuario.toLowerCase().includes(busqueda) || r.nombreCargador.toLowerCase().includes(busqueda);
-            const coincideEstado = !estado || r.estado === estado;
+            const coincide       = !busqueda || r.nombreUsuario.toLowerCase().includes(busqueda) || r.nombreCargador.toLowerCase().includes(busqueda);
+            const coincideEstado = !estado   || r.estado === estado;
             return coincide && coincideEstado;
         });
         renderizarReservas(filtradas);
     }
 
-    buscarReserva.addEventListener('input',       aplicarFiltrosReservas);
+    buscarReserva.addEventListener('input',        aplicarFiltrosReservas);
     filtroEstadoReserva.addEventListener('change', aplicarFiltrosReservas);
 
     // Favoritos:
@@ -481,6 +542,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const paginados = paginar(favoritos, paginas.favoritos);
+
         let html = `<table class="tabla-admin">
             <thead><tr>
                 <th>Usuario</th>
@@ -490,7 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <th>Fecha guardado</th>
             </tr></thead><tbody>`;
 
-        favoritos.forEach(f => {
+        paginados.forEach(f => {
             const fecha = new Date(f.fechaGuardado).toLocaleDateString('es-ES');
             html += `<tr>
                 <td>${f.nombreUsuario}</td>
@@ -503,10 +566,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         html += '</tbody></table>';
         contenedorFavoritos.innerHTML = html;
+
+        contenedorFavoritos.appendChild(crearPaginacion(
+            favoritos.length,
+            paginas.favoritos,
+            () => { paginas.favoritos--; renderizarFavoritos(favoritos); },
+            () => { paginas.favoritos++; renderizarFavoritos(favoritos); }
+        ));
     }
 
     function aplicarFiltrosFavoritos() {
-        const busqueda = buscarFavorito.value.trim().toLowerCase();
+        paginas.favoritos = 1;
+        const busqueda  = buscarFavorito.value.trim().toLowerCase();
         const filtrados = todosLosFavoritos.filter(f =>
             !busqueda || f.nombreUsuario.toLowerCase().includes(busqueda) || f.nombreCargador.toLowerCase().includes(busqueda)
         );
@@ -531,6 +602,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const paginadas = paginar(sesiones, paginas.sesiones);
+
         let html = `<table class="tabla-admin">
             <thead><tr>
                 <th>Usuario</th>
@@ -540,7 +613,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <th>Fecha y hora</th>
             </tr></thead><tbody>`;
 
-        sesiones.forEach(s => {
+        paginadas.forEach(s => {
             const fecha = new Date(s.fechaHora).toLocaleDateString('es-ES', {
                 day: '2-digit', month: '2-digit', year: 'numeric',
                 hour: '2-digit', minute: '2-digit'
@@ -557,10 +630,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         html += '</tbody></table>';
         contenedorSesiones.innerHTML = html;
+
+        contenedorSesiones.appendChild(crearPaginacion(
+            sesiones.length,
+            paginas.sesiones,
+            () => { paginas.sesiones--; renderizarSesiones(sesiones); },
+            () => { paginas.sesiones++; renderizarSesiones(sesiones); }
+        ));
     }
 
     function aplicarFiltrosSesiones() {
-        const busqueda = buscarSesion.value.trim().toLowerCase();
+        paginas.sesiones = 1;
+        const busqueda  = buscarSesion.value.trim().toLowerCase();
         const filtradas = todasLasSesiones.filter(s =>
             !busqueda || s.nombreUsuario.toLowerCase().includes(busqueda) || s.direccionIP.includes(busqueda)
         );
@@ -585,6 +666,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const paginadas = paginar(notificaciones, paginas.notificaciones);
+
         let html = `<table class="tabla-admin">
             <thead><tr>
                 <th>Cargador</th>
@@ -595,7 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <th>Acción</th>
             </tr></thead><tbody>`;
 
-        notificaciones.forEach(n => {
+        paginadas.forEach(n => {
             const fecha = new Date(n.fechaEnvio).toLocaleDateString('es-ES', {
                 day: '2-digit', month: '2-digit', year: 'numeric',
                 hour: '2-digit', minute: '2-digit'
@@ -612,10 +695,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         html += '</tbody></table>';
         contenedorNotificaciones.innerHTML = html;
+
+        contenedorNotificaciones.appendChild(crearPaginacion(
+            notificaciones.length,
+            paginas.notificaciones,
+            () => { paginas.notificaciones--; renderizarNotificaciones(notificaciones); },
+            () => { paginas.notificaciones++; renderizarNotificaciones(notificaciones); }
+        ));
     }
 
     function aplicarFiltrosNotificaciones() {
-        const leida = filtroLeidaNotificacion.value;
+        paginas.notificaciones = 1;
+        const leida    = filtroLeidaNotificacion.value;
         const filtradas = todasLasNotificaciones.filter(n =>
             leida === '' || n.leida.toString() === leida
         );

@@ -440,6 +440,45 @@ input, select { font-family: 'Outfit', sans-serif; }
     padding: 1.5rem 0;
 }
 
+/* ── Paginación ─────────────────────────────────────────── */
+.paginacion {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0.75rem 0.5rem 0;
+    font-size: 0.82rem;
+    color: #6b7280;
+    border-top: 1px solid #f3f4f6;
+    margin-top: 0.5rem;
+}
+
+.paginacion-info { margin-right: 0.5rem; }
+
+.paginacion-boton {
+    background: none;
+    border: 1px solid #e5e7eb;
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #6b7280;
+    font-size: 1.2rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.paginacion-boton:hover:not(:disabled) {
+    background-color: #f3f4f6;
+    color: #111827;
+}
+
+.paginacion-boton:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 768px) {
     .grid-estadisticas { grid-template-columns: repeat(2, 1fr); }

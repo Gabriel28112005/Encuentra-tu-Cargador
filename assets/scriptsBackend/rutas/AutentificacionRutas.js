@@ -1,9 +1,4 @@
-/**
- * AutentificacionRutas.js
- * Rutas de autenticación: login y logout.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+// Rutas de autenticación: login y logout
 
 'use strict';
 
@@ -23,11 +18,8 @@ const pool = require('../Db');
 // Importar middleware
 const { verificarToken } = require('../autentificacionRoles/Middleware');
 
-// ═══════════════════════════════════════════════════════════
-// POST /api/login
-// Verifica las credenciales del usuario y devuelve un token JWT.
-// También registra la sesión en la tabla sesiones.
-// ═══════════════════════════════════════════════════════════
+// En el post del login se realiza la verificación de las credenciales del usuario y devuelve un token JWT. También registra la sesión en la tabla sesiones
+
 router.post('/login', async (req, res) => {
     const { nombreUsuario, contrasena, tipoDispositivo } = req.body;
 
@@ -94,12 +86,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// POST /api/logout
-// Cierra la sesión del usuario.
-// El token se invalida en el frontend eliminándolo del localStorage.
-// Esta ruta simplemente confirma el logout al cliente.
-// ═══════════════════════════════════════════════════════════
+// En el post del logout se cierra la sesión del usuario. El token se invalida en el frontend eliminándolo del localStorage. Esta ruta confirma el logout al cliente.
 router.post('/logout', verificarToken, (req, res) => {
     return res.status(200).json({ mensaje: 'Sesión cerrada correctamente.' });
 });

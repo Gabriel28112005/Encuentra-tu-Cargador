@@ -24,8 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonCancelarEstado   = document.getElementById('botonCancelarEstado');
     const botonGuardarEstado    = document.getElementById('botonGuardarEstado');
 
-    let todosLosCargadores     = [];
-    let todasLasIncidencias    = [];
+    let todosLosCargadores  = [];
+    let todasLasIncidencias = [];
+
+    const paginas = { cargadores: 1, incidencias: 1 };
+    const ELEMENTOS_POR_PAGINA = 10;
 
     const nombreUsuario = localStorage.getItem('nombreUsuario');
     const rol           = localStorage.getItem('rol');
@@ -65,6 +68,28 @@ document.addEventListener('DOMContentLoaded', () => {
         statIncidencias.textContent = todasLasIncidencias.filter(n => n.leida === 0).length;
     }
 
+    // Función auxiliar que genera el HTML de paginación estilo Gmail
+    function crearPaginacion(total, paginaActual, onAnterior, onSiguiente) {
+        const inicio = Math.min((paginaActual - 1) * ELEMENTOS_POR_PAGINA + 1, total);
+        const fin    = Math.min(paginaActual * ELEMENTOS_POR_PAGINA, total);
+        const div    = document.createElement('div');
+        div.className = 'paginacion';
+        div.innerHTML = `
+            <span class="paginacion-info">${inicio}–${fin} de ${total}</span>
+            <button class="paginacion-boton" id="btnAnterior" ${paginaActual === 1 ? 'disabled' : ''}>&#8249;</button>
+            <button class="paginacion-boton" id="btnSiguiente" ${fin >= total ? 'disabled' : ''}>&#8250;</button>
+        `;
+        div.querySelector('#btnAnterior').addEventListener('click', onAnterior);
+        div.querySelector('#btnSiguiente').addEventListener('click', onSiguiente);
+        return div;
+    }
+
+    // Función auxiliar que pagina un array
+    function paginar(array, pagina) {
+        const inicio = (pagina - 1) * ELEMENTOS_POR_PAGINA;
+        return array.slice(inicio, inicio + ELEMENTOS_POR_PAGINA);
+    }
+
     // Función para cargar y mostrar los cargadores
     async function cargarCargadores() {
         try {
@@ -76,12 +101,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Funciones para el filtrado de los cargadores según su nombre, dirección, tipo y estado:
-
     function renderizarCargadores(cargadores) {
         if (cargadores.length === 0) {
             contenedorCargadores.innerHTML = '<p class="texto-vacio">No hay cargadores que coincidan.</p>';
             return;
         }
+
+        const paginados = paginar(cargadores, paginas.cargadores);
 
         let html = `<table class="tabla-tecnico">
             <thead><tr>
@@ -94,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <th>Acción</th>
             </tr></thead><tbody>`;
 
-        cargadores.forEach(c => {
+        paginados.forEach(c => {
             html += `<tr>
                 <td>${c.nombre}</td>
                 <td>${c.direccion}</td>
@@ -112,20 +138,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         html += '</tbody></table>';
         contenedorCargadores.innerHTML = html;
+
+        contenedorCargadores.appendChild(crearPaginacion(
+            cargadores.length,
+            paginas.cargadores,
+            () => { paginas.cargadores--; renderizarCargadores(cargadores); },
+            () => { paginas.cargadores++; renderizarCargadores(cargadores); }
+        ));
     }
 
     function aplicarFiltrosCargadores() {
-        const busqueda = buscarCargador.value.trim().toLowerCase();
-        const tipo     = filtroTipoCargador.value;
-        const estado   = filtroEstadoCargador.value;
-
+        paginas.cargadores = 1;
+        const busqueda  = buscarCargador.value.trim().toLowerCase();
+        const tipo      = filtroTipoCargador.value;
+        const estado    = filtroEstadoCargador.value;
         const filtrados = todosLosCargadores.filter(c => {
             const coincideNombre = !busqueda || c.nombre.toLowerCase().includes(busqueda) || c.direccion.toLowerCase().includes(busqueda);
             const coincideTipo   = !tipo     || c.tipo   === tipo;
             const coincideEstado = !estado   || c.estado === estado;
             return coincideNombre && coincideTipo && coincideEstado;
         });
-
         renderizarCargadores(filtrados);
     }
 
@@ -133,8 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
     filtroTipoCargador.addEventListener('change',   aplicarFiltrosCargadores);
     filtroEstadoCargador.addEventListener('change', aplicarFiltrosCargadores);
 
-    // Configuraciones para el modal que permite actualizar el estado del cargador. Este se abre al hacer click en el botón de "Actualizar estado" de cada cargador, y permite cambiar su estado entre libre, ocupado o en reparación.
-    
+    // Configuraciones para el modal que permite actualizar el estado del cargador.
     window.abrirModalEstado = function(id) {
         const cargador = todosLosCargadores.find(c => c.id === id);
         if (!cargador) return;
@@ -150,8 +181,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     botonGuardarEstado.addEventListener('click', async () => {
-        const id     = idCargadorActualizar.value;
-        const estado = modalNuevoEstado.value;
+        const id       = idCargadorActualizar.value;
+        const estado   = modalNuevoEstado.value;
         const cargador = todosLosCargadores.find(c => c.id === parseInt(id));
         if (!cargador) return;
 
@@ -168,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    //Configuraciones para la gestión de incidencias. Se muestra una tabla con las incidencias reportadas por los usuarios, permitiendo filtrarlas por si están leídas o no, y marcarlas como leídas para que el usuario que las reportó deje de recibir notificaciones sobre ellas.
+    // Configuraciones para la gestión de incidencias.
     async function cargarIncidencias() {
         try {
             todasLasIncidencias = await obtenerNotificaciones();
@@ -184,6 +215,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        const paginadas = paginar(incidencias, paginas.incidencias);
+
         let html = `<table class="tabla-tecnico">
             <thead><tr>
                 <th>Cargador</th>
@@ -194,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <th>Acción</th>
             </tr></thead><tbody>`;
 
-        incidencias.forEach(n => {
+        paginadas.forEach(n => {
             const fecha = new Date(n.fechaEnvio).toLocaleDateString('es-ES', {
                 day: '2-digit', month: '2-digit', year: 'numeric',
                 hour: '2-digit', minute: '2-digit'
@@ -211,10 +244,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         html += '</tbody></table>';
         contenedorIncidencias.innerHTML = html;
+
+        contenedorIncidencias.appendChild(crearPaginacion(
+            incidencias.length,
+            paginas.incidencias,
+            () => { paginas.incidencias--; renderizarIncidencias(incidencias); },
+            () => { paginas.incidencias++; renderizarIncidencias(incidencias); }
+        ));
     }
 
     function aplicarFiltrosIncidencias() {
-        const leida = filtroLeidaIncidencia.value;
+        paginas.incidencias = 1;
+        const leida    = filtroLeidaIncidencia.value;
         const filtradas = todasLasIncidencias.filter(n =>
             leida === '' || n.leida.toString() === leida
         );

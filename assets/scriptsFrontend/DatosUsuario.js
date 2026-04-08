@@ -25,6 +25,31 @@ document.addEventListener('DOMContentLoaded', () => {
     let todasLasReservas  = [];
     let todosLosFavoritos = [];
  
+    const paginas = { reservas: 1, favoritos: 1 };
+    const ELEMENTOS_POR_PAGINA = 10;
+ 
+    // Función auxiliar que genera el HTML de paginación estilo Gmail
+    function crearPaginacion(total, paginaActual, onAnterior, onSiguiente) {
+        const inicio = Math.min((paginaActual - 1) * ELEMENTOS_POR_PAGINA + 1, total);
+        const fin    = Math.min(paginaActual * ELEMENTOS_POR_PAGINA, total);
+        const div    = document.createElement('div');
+        div.className = 'paginacion';
+        div.innerHTML = `
+            <span class="paginacion-info">${inicio}–${fin} de ${total}</span>
+            <button class="paginacion-boton" id="btnAnterior" ${paginaActual === 1 ? 'disabled' : ''}>&#8249;</button>
+            <button class="paginacion-boton" id="btnSiguiente" ${fin >= total ? 'disabled' : ''}>&#8250;</button>
+        `;
+        div.querySelector('#btnAnterior').addEventListener('click', onAnterior);
+        div.querySelector('#btnSiguiente').addEventListener('click', onSiguiente);
+        return div;
+    }
+ 
+    // Función auxiliar que pagina un array
+    function paginar(array, pagina) {
+        const inicio = (pagina - 1) * ELEMENTOS_POR_PAGINA;
+        return array.slice(inicio, inicio + ELEMENTOS_POR_PAGINA);
+    }
+ 
     const nombreUsuario = localStorage.getItem('nombreUsuario');
     if (textoUsuario && nombreUsuario) {
         textoUsuario.textContent = nombreUsuario;
@@ -90,9 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
  
+        const paginadas = paginar(reservas, paginas.reservas);
         contenedorReservas.innerHTML = '';
  
-        reservas.forEach(reserva => {
+        paginadas.forEach(reserva => {
             const tarjeta = document.createElement('div');
             tarjeta.className = 'tarjeta-reserva';
  
@@ -133,9 +159,17 @@ document.addEventListener('DOMContentLoaded', () => {
  
             contenedorReservas.appendChild(tarjeta);
         });
+ 
+        contenedorReservas.appendChild(crearPaginacion(
+            reservas.length,
+            paginas.reservas,
+            () => { paginas.reservas--; renderizarReservas(reservas); },
+            () => { paginas.reservas++; renderizarReservas(reservas); }
+        ));
     }
  
     function aplicarFiltrosReservas() {
+        paginas.reservas = 1;
         const busqueda = buscarReserva.value.trim().toLowerCase();
         const estado   = filtroEstadoReserva.value;
  
@@ -168,9 +202,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
  
+        const paginados = paginar(favoritos, paginas.favoritos);
         contenedorFavoritos.innerHTML = '';
  
-        favoritos.forEach(favorito => {
+        paginados.forEach(favorito => {
             const tarjeta = document.createElement('div');
             tarjeta.className = 'tarjeta-favorito';
  
@@ -201,9 +236,17 @@ document.addEventListener('DOMContentLoaded', () => {
  
             contenedorFavoritos.appendChild(tarjeta);
         });
+ 
+        contenedorFavoritos.appendChild(crearPaginacion(
+            favoritos.length,
+            paginas.favoritos,
+            () => { paginas.favoritos--; renderizarFavoritos(favoritos); },
+            () => { paginas.favoritos++; renderizarFavoritos(favoritos); }
+        ));
     }
  
     function aplicarFiltrosFavoritos() {
+        paginas.favoritos = 1;
         const busqueda = buscarFavorito.value.trim().toLowerCase();
         const tipo     = filtroTipoFavorito.value;
         const estado   = filtroEstadoFavorito.value;
