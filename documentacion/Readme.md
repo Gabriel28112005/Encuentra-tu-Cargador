@@ -1,5 +1,5 @@
 # Encuentra tu Cargador
-**Práctica Final — Informática II**
+**Práctica Final - Informática II**
 Autores: Gabriel Kaakedjian, Gabriel Peña
 
 ---
@@ -29,14 +29,14 @@ Cada rol da acceso a una parte diferente de la aplicación:
 
 Antes de empezar, asegúrese de tener instalados los siguientes programas en su ordenador. Si ya los tiene instalados, puede saltarse este paso.
 
-- **Node.js** (versión 18 o superior) — descárgalo desde: https://nodejs.org (elegir la versión LTS)
-- **MySQL** — puede instalarlo de dos formas:
+- **Node.js** (versión 18 o superior) - descárgalo desde: https://nodejs.org (elegir la versión LTS)
+- **MySQL** - puede instalarlo de dos formas:
   - Con **XAMPP**: https://www.apachefriends.org
   - Con **MySQL Workbench**: https://dev.mysql.com/downloads/workbench
 
 ---
 
-## ⚠️ Advertencia importante — Nombre de la base de datos
+## ⚠️ Advertencia importante - Nombre de la base de datos
 
 El script `BaseDeDatos.sql` crea una base de datos llamada `encuentraTuCargador`. Si ya existe una base de datos con ese nombre en su MySQL, **será eliminada y reemplazada** al importar el script. Haga una copia de seguridad si es necesario antes de continuar.
 
@@ -44,13 +44,13 @@ El script `BaseDeDatos.sql` crea una base de datos llamada `encuentraTuCargador`
 
 ## Pasos para inicializar el proyecto
 
-### Paso 1 — Extraer el archivo ZIP
+### Paso 1 - Extraer el archivo ZIP
 
 Descomprima el archivo ZIP en una carpeta de su elección. Por ejemplo, en el Escritorio. Una vez descomprimido verá una carpeta llamada `GabrielKaakedjianGabrielPenaI2PracticaFinal`.
 
 ---
 
-### Paso 2 — Crear el archivo de configuración
+### Paso 2 - Crear el archivo de configuración
 
 Dentro de la carpeta del proyecto, cree un archivo nuevo llamado exactamente `.env` (sin ninguna extensión adicional). Para crearlo:
 
@@ -73,7 +73,7 @@ JWT_EXPIRACION=8h
 
 ---
 
-### Paso 3 — Instalar las dependencias del proyecto
+### Paso 3 - Instalar las dependencias del proyecto
 
 1. Abra una terminal o símbolo del sistema en la carpeta del proyecto.
    - En Windows: haga clic derecho dentro de la carpeta y seleccione "Abrir en Terminal" o "Abrir ventana de comandos aquí".
@@ -87,11 +87,11 @@ npm install
 
 ---
 
-### Paso 4 — Importar la base de datos
+### Paso 4 - Importar la base de datos
 
 Este paso crea la base de datos con todas las tablas y los usuarios iniciales. Elija una de las dos opciones según el programa que tenga instalado.
 
-#### Opción A — Con XAMPP
+#### Opción A - Con XAMPP
 
 1. Abra el panel de control de XAMPP y pulse **Start** en MySQL.
 2. Abra su navegador y vaya a: `http://localhost/phpmyadmin`
@@ -100,7 +100,7 @@ Este paso crea la base de datos con todas las tablas y los usuarios iniciales. E
 5. Pulse **Continuar** y espere a que finalice la importación.
 6. En el panel izquierdo debería aparecer la base de datos `encuentraTuCargador` con todas sus tablas.
 
-#### Opción B — Con MySQL Workbench
+#### Opción B - Con MySQL Workbench
 
 1. Abra MySQL Workbench y haga doble clic en su conexión de MySQL para conectarse.
 2. En el menú superior vaya a **File → Open SQL Script**.
@@ -110,7 +110,7 @@ Este paso crea la base de datos con todas las tablas y los usuarios iniciales. E
 
 ---
 
-### Paso 5 — Arrancar el servidor
+### Paso 5 - Arrancar el servidor
 
 1. En la terminal que abrió en el Paso 3, escriba el siguiente comando y pulse Enter:
 
@@ -130,7 +130,7 @@ Si no aparece alguno de estos mensajes, compruebe que MySQL está en ejecución 
 
 ---
 
-### Paso 6 — Abrir la aplicación
+### Paso 6 - Abrir la aplicación
 
 1. Abra su navegador (Chrome, Firefox, Edge o Safari).
 2. Escriba la siguiente dirección y pulse Enter:
@@ -190,28 +190,28 @@ Ctrl + C
 ## Tecnologías utilizadas
 
 ### Frontend
-- **HTML5, CSS3 y JavaScript (ES6+)** — estructura, estilos y lógica de cada página.
-- **Bootstrap 5** — componentes de interfaz y diseño responsive.
-- **Leaflet.js** — librería de mapas interactivos sobre teselas de OpenStreetMap.
-- **WebSockets (API nativa del navegador)** — conexión persistente con el servidor para recibir en tiempo real: cambios de estado de los marcadores del mapa, actualizaciones del contador de incidencias pendientes y cambios en las tablas del panel de administrador y técnico.
+- **HTML5, CSS3 y JavaScript (ES6+)** - estructura, estilos y lógica de cada página.
+- **Bootstrap 5** - componentes de interfaz y diseño responsive.
+- **Leaflet.js** - librería de mapas interactivos sobre teselas de OpenStreetMap.
+- **WebSockets (API nativa del navegador)** - conexión persistente con el servidor para recibir en tiempo real: cambios de estado de los marcadores del mapa, actualizaciones del contador de incidencias pendientes y cambios en las tablas del panel de administrador y técnico.
 
 ### Backend
-- **Node.js** — entorno de ejecución del servidor.
-- **Express** — framework para la construcción de la API REST.
-- **jsonwebtoken** — generación y verificación de tokens JWT para la autenticación.
-- **bcrypt** — cifrado irreversible de contraseñas con 10 salt rounds.
-- **ws** — librería WebSocket del servidor para enviar notificaciones en tiempo real a los clientes conectados según su rol.
-- **node-cron** — planificador de tareas que cancela automáticamente las reservas expiradas cada minuto y libera el cargador correspondiente.
-- **dotenv** — carga de variables de entorno desde el archivo `.env`.
-- **mysql2** — cliente MySQL para la comunicación con la base de datos mediante pool de conexiones.
+- **Node.js** - entorno de ejecución del servidor.
+- **Express** - framework para la construcción de la API REST.
+- **jsonwebtoken** - generación y verificación de tokens JWT para la autenticación.
+- **bcrypt** - cifrado irreversible de contraseñas con 10 salt rounds.
+- **ws** - librería WebSocket del servidor para enviar notificaciones en tiempo real a los clientes conectados según su rol.
+- **node-cron** - planificador de tareas que cancela automáticamente las reservas expiradas cada minuto y libera el cargador correspondiente.
+- **dotenv** - carga de variables de entorno desde el archivo `.env`.
+- **mysql2** - cliente MySQL para la comunicación con la base de datos mediante pool de conexiones.
 
 ### Base de datos
-- **MySQL** — sistema de gestión de base de datos relacional con 7 tablas: `roles`, `usuarios`, `cargadores`, `reservas`, `favoritos`, `sesiones` y `notificaciones`.
+- **MySQL** - sistema de gestión de base de datos relacional con 7 tablas: `roles`, `usuarios`, `cargadores`, `reservas`, `favoritos`, `sesiones` y `notificaciones`.
 
 ### APIs externas
-- **OpenStreetMap** — proveedor de teselas del mapa (gratuito y sin necesidad de API key).
-- **Google Maps** — apertura de la ruta de navegación hasta el cargador seleccionado.
+- **OpenStreetMap** - proveedor de teselas del mapa (gratuito y sin necesidad de API key).
+- **Google Maps** - apertura de la ruta de navegación hasta el cargador seleccionado.
 
 ---
 
-© 2026 Encuentra tu Cargador — Gabriel Kaakedjian, Gabriel Peña
+© 2026 Encuentra tu Cargador - Gabriel Kaakedjian, Gabriel Peña
