@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const textoUsuario       = document.getElementById('textoUsuario');
     const nombreBienvenida   = document.getElementById('nombreBienvenida');
-    const statUsuarios       = document.getElementById('statUsuarios');
+    const statIncidencias    = document.getElementById('statIncidencias');
+    const tarjetaIncidencias = document.getElementById('tarjetaIncidencias');
     const statLibres         = document.getElementById('statLibres');
     const statOcupados       = document.getElementById('statOcupados');
     const statReparacion     = document.getElementById('statReparacion');
@@ -138,12 +139,19 @@ document.addEventListener('DOMContentLoaded', () => {
         actualizarEstadisticas();
     }
 
-    // Estadísticas
+    // Estadísticas. La tarjeta de incidencias se muestra en rojo cuando hay pendientes y en azul cuando no hay ninguna
     function actualizarEstadisticas() {
-        statUsuarios.textContent    = todosLosUsuarios.length;
+        const pendientes        = todasLasNotificaciones.filter(n => n.leida === 0).length;
+        statIncidencias.textContent = pendientes;
         statLibres.textContent      = todosLosCargadores.filter(c => c.estado === 'libre').length;
         statOcupados.textContent    = todosLosCargadores.filter(c => c.estado === 'ocupado').length;
         statReparacion.textContent  = todosLosCargadores.filter(c => c.estado === 'en_reparacion').length;
+
+        if (pendientes > 0) {
+            tarjetaIncidencias.classList.add('tarjeta-estadistica--alerta');
+        } else {
+            tarjetaIncidencias.classList.remove('tarjeta-estadistica--alerta');
+        }
     }
 
     // Función auxiliar que genera el HTML de paginación estilo Gmail
@@ -770,6 +778,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ws.addEventListener('message', (evento) => {
         try {
             const datos = JSON.parse(evento.data);
+
+            // Actualizar tabla y estadísticas cuando cambia el estado de un cargador
             if (datos.tipo === 'estadoCargador') {
                 const cargador = todosLosCargadores.find(c => c.id === datos.idCargador);
                 if (cargador) {
@@ -778,6 +788,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     renderizarCargadores(todosLosCargadores);
                 }
             }
+
+            // Actualizar estadísticas y tabla cuando llega una nueva incidencia
+            if (datos.tipo === 'incidencia') {
+                cargarNotificaciones().then(() => actualizarEstadisticas());
+            }
+
         } catch (error) {
             console.error('Error al procesar mensaje WebSocket:', error.message);
         }

@@ -133,6 +133,7 @@ input, select { font-family: 'Outfit', sans-serif; }
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
 .estadistica-numero {
@@ -145,6 +146,20 @@ input, select { font-family: 'Outfit', sans-serif; }
 .estadistica-etiqueta {
     font-size: 0.82rem;
     color: #6b7280;
+}
+
+/* Tarjeta de incidencias en estado de alerta (con incidencias pendientes) */
+.tarjeta-estadistica--alerta {
+    background-color: #FCEBEB;
+    border-color:     #F7C1C1;
+}
+
+.tarjeta-estadistica--alerta .estadistica-numero {
+    color: #A32D2D;
+}
+
+.tarjeta-estadistica--alerta .estadistica-etiqueta {
+    color: #791F1F;
 }
 
 .grid-accesos {

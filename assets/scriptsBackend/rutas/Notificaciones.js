@@ -8,7 +8,7 @@ const pool    = require('../Db');
 const { verificarToken, verificarRol } = require('../autentificacionRoles/Middleware');
 const { enviarNotificacion } = require('../WebSocket');
 
-// Petición GET /api/notificaciones que devuelve las notificaciones pendientes. Solo accesible por administrador y técnico.
+// Petición GET /api/notificaciones que devuelve las notificaciones pendientes. Solo es accesible para el administrador y los técnicos
 router.get('/notificaciones', verificarToken, verificarRol('administrador', 'tecnico'), async (req, res) => {
     try {
         const [filas] = await pool.execute(
