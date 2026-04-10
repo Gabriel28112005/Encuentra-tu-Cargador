@@ -36,8 +36,7 @@ app.use(express.json());
 // Middleware CORS para permitir peticiones desde el navegador
 app.use(cors());
 
-// Servir archivos estáticos desde la raíz del proyecto
-// Esto permite que el navegador acceda a los HTML, CSS y JS
+// Servir archivos estáticos desde la raíz del proyecto. Esto permite que el navegador acceda a los HTML, CSS y JS
 app.use(express.static(path.join(__dirname)));
 
 // Registro de rutas desde la Api
@@ -66,7 +65,7 @@ app.use((error, req, res, next) => {
     res.status(500).json({ mensaje: 'Error interno del servidor.' });
 });
 
-// Creación del servidor HTTP a partir de la aplicación Express y luego iniciar el WebSocket en ese mismo servidor para compartir el puerto.
+// Creación del servidor HTTP a partir de Express y luego iniciar el WebSocket en ese mismo servidor para compartir el puerto.
 const servidor = http.createServer(app);
 iniciarWebSocket(servidor);
 
