@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const panelNombre          = document.getElementById('panelNombre');
     const panelEstado          = document.getElementById('panelEstado');
     const panelTipo            = document.getElementById('panelTipo');
+    const panelNivelBateria    = document.getElementById('panelNivelBateria');
     const panelCoste           = document.getElementById('panelCoste');
     const panelTiempo          = document.getElementById('panelTiempo');
     const panelDireccion       = document.getElementById('panelDireccion');
@@ -33,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonConfirmarReserva= document.getElementById('botonConfirmarReserva');
     const mensajeReserva       = document.getElementById('mensajeReserva');
 
-    let cargadorActivo  = null;
-    let marcadores      = [];
+    let cargadorActivo     = null;
+    let marcadores         = [];
     let todosLosCargadores = [];
 
     // Mostrar el nombre de usuario en la cabecera
@@ -119,11 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
     async function mostrarDetalle(cargador) {
         cargadorActivo = cargador;
 
-        panelNombre.textContent    = cargador.nombre;
-        panelTipo.textContent      = etiquetaTipo(cargador.tipo);
-        panelCoste.textContent     = `${cargador.coste} €/kWh`;
-        panelTiempo.textContent    = `${cargador.tiempoEstimado} min`;
-        panelDireccion.textContent = cargador.direccion;
+        panelNombre.textContent        = cargador.nombre;
+        panelTipo.textContent          = etiquetaTipo(cargador.tipo);
+        panelNivelBateria.textContent  = `${cargador.nivelBateria}%`;
+        panelCoste.textContent         = `${cargador.coste} €/kWh`;
+        panelTiempo.textContent        = `${cargador.tiempoEstimado} min`;
+        panelDireccion.textContent     = cargador.direccion;
 
         panelEstado.className   = `panel-valor estado-${cargador.estado}`;
         panelEstado.textContent = etiquetaEstado(cargador.estado);
@@ -167,13 +169,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Filtros de cargadores
     function aplicarFiltros() {
-        const tipo   = filtroTipo.value;
-        const estado = filtroEstado.value;
+        const tipo     = filtroTipo.value;
+        const estado   = filtroEstado.value;
         const busqueda = inputBusqueda.value.trim().toLowerCase();
 
         const filtrados = todosLosCargadores.filter(c => {
-            const coincideTipo    = !tipo   || c.tipo   === tipo;
-            const coincideEstado  = !estado || c.estado === estado;
+            const coincideTipo     = !tipo     || c.tipo   === tipo;
+            const coincideEstado   = !estado   || c.estado === estado;
             const coincideBusqueda = !busqueda ||
                 c.nombre.toLowerCase().includes(busqueda) ||
                 c.direccion.toLowerCase().includes(busqueda);
@@ -318,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     renderizarMarcadores(todosLosCargadores);
                     // Si el panel lateral está mostrando este cargador, actualizarlo también
                     if (cargadorActivo && cargadorActivo.id === datos.idCargador) {
-                        cargadorActivo.estado = datos.estado;
+                        cargadorActivo.estado   = datos.estado;
                         panelEstado.className   = `panel-valor estado-${datos.estado}`;
                         panelEstado.textContent = etiquetaEstado(datos.estado);
                         botonReservar.disabled  = datos.estado !== 'libre';
