@@ -238,6 +238,22 @@ a:hover {
     background-color: #1648c8;
 }
 
+/* Botón para completar una reserva activa */
+.boton-completar {
+    background-color: #EAF3DE;
+    color: #27500A;
+    border: none;
+    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.boton-completar:hover {
+    background-color: #C0DD97;
+}
+
+/* Botón para cancelar una reserva o eliminar un favorito */
 .boton-peligro {
     background-color: #FCEBEB;
     color: #791F1F;

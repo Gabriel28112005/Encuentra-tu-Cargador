@@ -794,6 +794,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 cargarNotificaciones().then(() => actualizarEstadisticas());
             }
 
+            // Actualizar la tabla de reservas cuando se crea, completa o cancela una reserva
+            if (datos.tipo === 'reserva') {
+                cargarReservas();
+            }
+
         } catch (error) {
             console.error('Error al procesar mensaje WebSocket:', error.message);
         }

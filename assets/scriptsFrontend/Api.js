@@ -160,6 +160,20 @@ async function crearReserva(idCargador) {
 }
 
 /**
+ * Marca una reserva como completada y libera el cargador.
+ * @param {number} id
+ * @returns {Promise}
+ */
+
+async function completarReserva(id) {
+    const respuesta = await fetch(`${URL_BASE}/reservas/${id}/completar`, {
+        method:  'PUT',
+        headers: obtenerCabeceras()
+    });
+    return manejarRespuesta(respuesta);
+}
+
+/**
  * Cancela una reserva.
  * @param {number} id
  * @returns {Promise}

@@ -2,8 +2,7 @@
 
 'use strict';
  
-document.addEventListener('DOMContentLoaded', () => {
- 
+document.addEventListener('DOMContentLoaded', () => { 
     const datoNombre             = document.getElementById('datoNombre');
     const datoApellido           = document.getElementById('datoApellido');
     const datoNombreUsuario      = document.getElementById('datoNombreUsuario');
@@ -138,13 +137,30 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${etiquetaEstado(reserva.estado)}
                     </span>
                     ${reserva.estado === 'activa' ? `
+                        <button class="boton-completar" data-id="${reserva.id}">
+                            Completar
+                        </button>
                         <button class="boton-peligro" data-id="${reserva.id}">
                             Cancelar
                         </button>
                     ` : ''}
                 </div>
             `;
- 
+
+            // Marcar la reserva como completada y liberar el cargador
+            const botonCompletar = tarjeta.querySelector('.boton-completar');
+            if (botonCompletar) {
+                botonCompletar.addEventListener('click', async () => {
+                    try {
+                        await completarReserva(reserva.id);
+                        cargarReservas();
+                    } catch (error) {
+                        console.error('Error al completar reserva:', error.message);
+                    }
+                });
+            }
+
+            // Cancelar la reserva y liberar el cargador
             const botonCancelar = tarjeta.querySelector('.boton-peligro');
             if (botonCancelar) {
                 botonCancelar.addEventListener('click', async () => {

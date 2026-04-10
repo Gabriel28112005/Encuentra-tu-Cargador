@@ -80,16 +80,78 @@ router.post('/reservas', verificarToken, async (req, res) => {
             [idCargador]
         );
 
-        // Notificar en tiempo real a todos los roles del cambio de estado
+        // Notificar en tiempo real a todos los roles del cambio de estado del cargador
         enviarNotificacion(['administrador', 'tecnico', 'usuario'], {
             tipo:       'estadoCargador',
             idCargador: parseInt(idCargador),
             estado:     'ocupado'
         });
 
+        // Notificar en tiempo real al administrador y técnico de la nueva reserva
+        enviarNotificacion(['administrador', 'tecnico'], {
+            tipo: 'reserva'
+        });
+
         return res.status(201).json({ mensaje: 'Reserva creada correctamente.' });
     } catch (error) {
         console.error('Error en POST /api/reservas:', error.message);
+        return res.status(500).json({ mensaje: 'Error interno del servidor.' });
+    }
+});
+
+
+// Petición PUT /api/reservas/:id/completar que marca una reserva como completada y libera el cargador. Solo puede realizarla el usuario propietario de la reserva
+router.put('/reservas/:id/completar', verificarToken, async (req, res) => {
+    try {
+        // Obtener la reserva
+        const [filas] = await pool.execute(
+            `SELECT * FROM reservas WHERE id = ?`,
+            [req.params.id]
+        );
+
+        if (filas.length === 0) {
+            return res.status(404).json({ mensaje: 'Reserva no encontrada.' });
+        }
+
+        const reserva = filas[0];
+
+        // Comprobar que el usuario es el propietario
+        if (reserva.idUsuario !== req.usuario.id) {
+            return res.status(403).json({ mensaje: 'No tienes permiso para completar esta reserva.' });
+        }
+
+        // Comprobar que la reserva está activa
+        if (reserva.estado !== 'activa') {
+            return res.status(400).json({ mensaje: 'Solo se pueden completar reservas activas.' });
+        }
+
+        // Marcar la reserva como completada
+        await pool.execute(
+            `UPDATE reservas SET estado = 'completada' WHERE id = ?`,
+            [req.params.id]
+        );
+
+        // Liberar el cargador
+        await pool.execute(
+            `UPDATE cargadores SET estado = 'libre' WHERE id = ?`,
+            [reserva.idCargador]
+        );
+
+        // Notificar en tiempo real a todos los roles del cambio de estado del cargador
+        enviarNotificacion(['administrador', 'tecnico', 'usuario'], {
+            tipo:       'estadoCargador',
+            idCargador: reserva.idCargador,
+            estado:     'libre'
+        });
+
+        // Notificar en tiempo real al administrador y técnico del cambio de estado de la reserva
+        enviarNotificacion(['administrador', 'tecnico'], {
+            tipo: 'reserva'
+        });
+
+        return res.status(200).json({ mensaje: 'Reserva completada correctamente.' });
+    } catch (error) {
+        console.error('Error en PUT /api/reservas/:id/completar:', error.message);
         return res.status(500).json({ mensaje: 'Error interno del servidor.' });
     }
 });
@@ -127,11 +189,16 @@ router.delete('/reservas/:id', verificarToken, async (req, res) => {
             [reserva.idCargador]
         );
 
-        // Notificar en tiempo real a todos los roles del cambio de estado
+        // Notificar en tiempo real a todos los roles del cambio de estado del cargador
         enviarNotificacion(['administrador', 'tecnico', 'usuario'], {
             tipo:       'estadoCargador',
             idCargador: reserva.idCargador,
             estado:     'libre'
+        });
+
+        // Notificar en tiempo real al administrador y técnico del cambio de estado de la reserva
+        enviarNotificacion(['administrador', 'tecnico'], {
+            tipo: 'reserva'
         });
 
         return res.status(200).json({ mensaje: 'Reserva cancelada correctamente.' });
