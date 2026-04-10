@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const textoUsuario       = document.getElementById('textoUsuario');
     const nombreBienvenida   = document.getElementById('nombreBienvenida');
     const statUsuarios       = document.getElementById('statUsuarios');
-    const statCargadores     = document.getElementById('statCargadores');
-    const statReservas       = document.getElementById('statReservas');
-    const statIncidencias    = document.getElementById('statIncidencias');
+    const statLibres         = document.getElementById('statLibres');
+    const statOcupados       = document.getElementById('statOcupados');
+    const statReparacion     = document.getElementById('statReparacion');
 
     // Contenedores de tablas
     const contenedorUsuarios       = document.getElementById('contenedorUsuarios');
@@ -105,6 +105,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (nombreBienvenida) nombreBienvenida.textContent = nombreUsuario || '';
 
+    // Mostrar/ocultar contraseña en el modal de usuario
+    const botonVerContrasenaModal = document.getElementById('botonVerContrasenaModal');
+    const ojoAbiertoModal         = document.getElementById('ojoAbiertoModal');
+    const ojoTachadoModal         = document.getElementById('ojoTachadoModal');
+
+    botonVerContrasenaModal.addEventListener('click', () => {
+        const oculta = modalContrasenaUsuario.type === 'password';
+        modalContrasenaUsuario.type        = oculta ? 'text' : 'password';
+        ojoAbiertoModal.style.display      = oculta ? 'none'  : 'block';
+        ojoTachadoModal.style.display      = oculta ? 'block' : 'none';
+    });
+
     cargarTodo();
 
     // Scroll a la selección al hacer clic
@@ -129,9 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Estadísticas
     function actualizarEstadisticas() {
         statUsuarios.textContent    = todosLosUsuarios.length;
-        statCargadores.textContent  = todosLosCargadores.length;
-        statReservas.textContent    = todasLasReservas.length;
-        statIncidencias.textContent = todasLasNotificaciones.filter(n => n.leida === 0).length;
+        statLibres.textContent      = todosLosCargadores.filter(c => c.estado === 'libre').length;
+        statOcupados.textContent    = todosLosCargadores.filter(c => c.estado === 'ocupado').length;
+        statReparacion.textContent  = todosLosCargadores.filter(c => c.estado === 'en_reparacion').length;
     }
 
     // Función auxiliar que genera el HTML de paginación estilo Gmail
@@ -156,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return array.slice(inicio, inicio + ELEMENTOS_POR_PAGINA);
     }
 
-    //Usuarios:
+    //Usuarios
     async function cargarUsuarios() {
         try {
             todosLosUsuarios = await obtenerUsuarios();
@@ -304,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Cargadores:
+    // Cargadores
     async function cargarCargadores() {
         try {
             todosLosCargadores = await obtenerCargadores();
@@ -459,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Reservas:
+    // Reservas
     async function cargarReservas() {
         try {
             todasLasReservas = await obtenerReservas();
@@ -526,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
     buscarReserva.addEventListener('input',        aplicarFiltrosReservas);
     filtroEstadoReserva.addEventListener('change', aplicarFiltrosReservas);
 
-    // Favoritos:
+    // Favoritos
     async function cargarFavoritos() {
         try {
             todosLosFavoritos = await obtenerFavoritos();
@@ -586,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buscarFavorito.addEventListener('input', aplicarFiltrosFavoritos);
 
-    // Sesiones:
+    // Sesiones
     async function cargarSesiones() {
         try {
             todasLasSesiones = await obtenerSesiones();
@@ -650,7 +662,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buscarSesion.addEventListener('input', aplicarFiltrosSesiones);
 
-    // Notificaciones:
+    // Notificaciones
     async function cargarNotificaciones() {
         try {
             todasLasNotificaciones = await obtenerNotificaciones();
@@ -750,5 +762,25 @@ document.addEventListener('DOMContentLoaded', () => {
         elemento.className   = 'mensaje-modal' + (esError ? ' error' : '');
         elemento.classList.remove('oculto');
     }
+
+    // Actualización en tiempo real del estado de los cargadores mediante WebSocket
+    const wsUrl = `ws://localhost:3000?rol=${localStorage.getItem('rol')}`;
+    const ws    = new WebSocket(wsUrl);
+
+    ws.addEventListener('message', (evento) => {
+        try {
+            const datos = JSON.parse(evento.data);
+            if (datos.tipo === 'estadoCargador') {
+                const cargador = todosLosCargadores.find(c => c.id === datos.idCargador);
+                if (cargador) {
+                    cargador.estado = datos.estado;
+                    actualizarEstadisticas();
+                    renderizarCargadores(todosLosCargadores);
+                }
+            }
+        } catch (error) {
+            console.error('Error al procesar mensaje WebSocket:', error.message);
+        }
+    });
 
 });

@@ -1,9 +1,4 @@
-/**
- * Favoritos.js
- * Rutas de gestión de cargadores favoritos.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+// Rutas de gestión de cargadores favoritos
 
 'use strict';
 
@@ -12,12 +7,12 @@ const router  = express.Router();
 const pool    = require('../Db');
 const { verificarToken, verificarRol } = require('../autentificacionRoles/Middleware');
 
-// ═══════════════════════════════════════════════════════════
-// GET /api/favoritos
-// Devuelve favoritos según el rol:
-// - Usuario: solo sus propios favoritos
-// - Administrador y Técnico: todos los favoritos
-// ═══════════════════════════════════════════════════════════
+
+/*
+    Método GET /api/favoritos que devuelve favoritos según el rol:
+        - Usuario: solo sus propios favoritos
+        - Administrador: todos los favoritos
+*/
 router.get('/favoritos', verificarToken, async (req, res) => {
     try {
         let filas;
@@ -50,11 +45,8 @@ router.get('/favoritos', verificarToken, async (req, res) => {
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// POST /api/favoritos
-// Añade un cargador a favoritos.
-// Accesible por todos los roles.
-// ═══════════════════════════════════════════════════════════
+
+// Petición POST /api/favoritos que añade un cargador a favoritos
 router.post('/favoritos', verificarToken, async (req, res) => {
     const { idCargador } = req.body;
 
@@ -77,11 +69,8 @@ router.post('/favoritos', verificarToken, async (req, res) => {
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// DELETE /api/favoritos/:idCargador
-// Elimina un cargador de favoritos.
-// Accesible por todos los roles.
-// ═══════════════════════════════════════════════════════════
+
+// Petición DELETE /api/favoritos/:idCargador que elimina un cargador de favoritos
 router.delete('/favoritos/:idCargador', verificarToken, async (req, res) => {
     try {
         const [resultado] = await pool.execute(

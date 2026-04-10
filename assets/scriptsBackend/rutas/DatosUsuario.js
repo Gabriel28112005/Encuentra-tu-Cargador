@@ -1,9 +1,4 @@
-/**
- * DatosUsuario.js
- * Rutas de consulta y actualización del perfil del usuario.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+// Rutas de consulta y actualización del perfil del usuario
 
 'use strict';
 
@@ -13,12 +8,7 @@ const pool    = require('../Db');
 const bcrypt  = require('bcrypt');
 const { verificarToken } = require('../autentificacionRoles/Middleware');
 
-// ═══════════════════════════════════════════════════════════
-// GET /api/datosusuario
-// Devuelve nombre, apellido y nombreUsuario del usuario autenticado.
-// No devuelve rol, timestamp ni contraseña.
-// Accesible por todos los roles.
-// ═══════════════════════════════════════════════════════════
+// Petición GET /api/datosusuario pobtener nombre, apellido y nombreUsuario del usuario autenticado, pero no devuelve rol, timestamp ni contraseña. Esto es accesible por todos los roles.
 router.get('/datosusuario', verificarToken, async (req, res) => {
     try {
         const [filas] = await pool.execute(
@@ -39,11 +29,8 @@ router.get('/datosusuario', verificarToken, async (req, res) => {
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// PUT /api/datosusuario/contrasena
-// Actualiza la contraseña del usuario autenticado.
-// Accesible por todos los roles.
-// ═══════════════════════════════════════════════════════════
+
+// Petición PUT /api/datosusuario/contrasena que actualiza la contraseña del usuario autenticado. Es accesible para todos los roles.
 router.put('/datosusuario/contrasena', verificarToken, async (req, res) => {
     const { contrasenaActual, contrasenaNueva } = req.body;
 

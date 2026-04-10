@@ -1,38 +1,28 @@
-/**
- * WebSocket.js
- * Configuración del servidor WebSocket para notificaciones en tiempo real.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+// Configuración del servidor WebSocket para notificiaciones en tiempo real.
 
 'use strict';
 
 const { WebSocketServer } = require('ws');
 
-// ═══════════════════════════════════════════════════════════
-// MAPA DE CLIENTES CONECTADOS
-// Almacena las conexiones activas organizadas por rol,
-// permitiendo enviar mensajes solo a roles específicos.
-// ═══════════════════════════════════════════════════════════
+// Mapa de clientes conectados. Almacena las conexiones activas según su rol para así enviar mensajes solo a los roles específicos
 const clientes = {
     administrador: new Set(),
     tecnico:       new Set(),
     usuario:       new Set()
 };
 
-// ═══════════════════════════════════════════════════════════
-// INICIAR SERVIDOR WEBSOCKET
-// Recibe el servidor HTTP creado en Server.js y comparte
-// el mismo puerto, evitando abrir un puerto adicional.
-// ═══════════════════════════════════════════════════════════
+
+/*
+    Inicialización del servidor WebSocket. Este recibe el servidor HTTP creado en Server.js y comparte el mismo puerto para evitar 
+    abrir un puerto adicional
+*/
+
 function iniciarWebSocket(servidor) {
     const wss = new WebSocketServer({ server: servidor });
 
     wss.on('connection', (ws, req) => {
 
         // Extraer el rol del parámetro de la URL al conectarse
-        // Ejemplo de conexión desde el frontend:
-        // new WebSocket('ws://localhost:3000?rol=administrador')
         const parametros = new URLSearchParams(req.url.replace('/?', ''));
         const rol        = parametros.get('rol');
 
@@ -59,11 +49,8 @@ function iniciarWebSocket(servidor) {
     console.log('Servidor WebSocket iniciado.');
 }
 
-// ═══════════════════════════════════════════════════════════
-// ENVIAR NOTIFICACIÓN A ROLES ESPECÍFICOS
-// Se llama desde las rutas cuando ocurre una incidencia.
-// Ejemplo: enviarNotificacion(['administrador', 'tecnico'], datos)
-// ═══════════════════════════════════════════════════════════
+
+// Envío de notificación a roles específicos. Se llama desde las rutas cuando ocurre una incidencia
 function enviarNotificacion(roles, datos) {
     const mensaje = JSON.stringify(datos);
 

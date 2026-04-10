@@ -1,10 +1,4 @@
-/**
- * Usuarios.js
- * Rutas de gestión de usuarios (CRUD).
- * Solo accesible por el administrador.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+// Rutas de gestión de usuarios (CRUD). Solo es accesible por el administrador.
 
 'use strict';
 
@@ -13,11 +7,8 @@ const router  = express.Router();
 const pool    = require('../Db');
 const { verificarToken, verificarRol } = require('../autentificacionRoles/Middleware');
 
-// ═══════════════════════════════════════════════════════════
-// GET /api/usuarios
-// Devuelve la lista completa de usuarios.
-// Solo accesible por el administrador.
-// ═══════════════════════════════════════════════════════════
+
+// Petición GET /api/usuarios que devuelve la lista completa de usuarios
 router.get('/usuarios', verificarToken, verificarRol('administrador'), async (req, res) => {
     try {
         const [filas] = await pool.execute(
@@ -33,11 +24,8 @@ router.get('/usuarios', verificarToken, verificarRol('administrador'), async (re
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// GET /api/usuarios/:id
-// Devuelve los datos de un usuario concreto.
-// Solo accesible por el administrador.
-// ═══════════════════════════════════════════════════════════
+
+// Método GET /api/usuarios/:id que devuelve los datos de un usuario concreto
 router.get('/usuarios/:id', verificarToken, verificarRol('administrador'), async (req, res) => {
     try {
         const [filas] = await pool.execute(
@@ -57,11 +45,8 @@ router.get('/usuarios/:id', verificarToken, verificarRol('administrador'), async
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// POST /api/usuarios
-// Crea un nuevo usuario.
-// Solo accesible por el administrador.
-// ═══════════════════════════════════════════════════════════
+
+// Método POST /api/usuarios que crea un nuevo usuario
 router.post('/usuarios', verificarToken, verificarRol('administrador'), async (req, res) => {
     const { nombre, apellido, nombreUsuario, contrasena, idRol } = req.body;
 
@@ -88,11 +73,8 @@ router.post('/usuarios', verificarToken, verificarRol('administrador'), async (r
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// PUT /api/usuarios/:id
-// Actualiza los datos de un usuario.
-// Solo accesible por el administrador.
-// ═══════════════════════════════════════════════════════════
+
+// Método PUT /api/usuarios/:id que actualiza los datos de un usuario.
 router.put('/usuarios/:id', verificarToken, verificarRol('administrador'), async (req, res) => {
     const { nombre, apellido, nombreUsuario, idRol } = req.body;
 
@@ -119,11 +101,8 @@ router.put('/usuarios/:id', verificarToken, verificarRol('administrador'), async
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// DELETE /api/usuarios/:id
-// Elimina un usuario.
-// Solo accesible por el administrador.
-// ═══════════════════════════════════════════════════════════
+
+// Método DELETE /api/usuarios/:id que elimina a un usuario
 router.delete('/usuarios/:id', verificarToken, verificarRol('administrador'), async (req, res) => {
     try {
         const [resultado] = await pool.execute(

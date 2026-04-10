@@ -1,9 +1,4 @@
-/**
- * Db.js
- * Conexión y configuración de la base de datos MySQL.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+// Conexión y configuración de la base de datos MySQL que está en el archivo BaseDeDatos.sql
 
 'use strict';
 
@@ -14,12 +9,11 @@ const path   = require('path');
 // Cargar variables de entorno desde la raíz del proyecto
 dotenv.config({ path: path.join(__dirname, '..', '..', '..', '.env') });
 
-// ═══════════════════════════════════════════════════════════
-// CONFIGURACIÓN DEL POOL DE CONEXIONES
-// Un pool gestiona múltiples conexiones simultáneas de forma
-// eficiente, evitando abrir y cerrar una conexión por cada
-// petición que llega al servidor.
-// ═══════════════════════════════════════════════════════════
+
+/*
+    Configuración del pool de conexiones a MySQL utilizando los datos del ".env". Esto se hace para no tener que 
+    abrir y cerrar una conexión por cada peteción que le llega al servidor
+*/
 const pool = mysql.createPool({
     host:            process.env.DB_HOST,
     port:            process.env.DB_PORT,
@@ -31,9 +25,8 @@ const pool = mysql.createPool({
     queueLimit:         0
 });
 
-// ═══════════════════════════════════════════════════════════
-// VERIFICACIÓN DE LA CONEXIÓN AL ARRANCAR EL SERVIDOR
-// ═══════════════════════════════════════════════════════════
+
+// Verificación de la conexión al arrancar el servidor
 async function verificarConexion() {
     try {
         const conexion = await pool.getConnection();

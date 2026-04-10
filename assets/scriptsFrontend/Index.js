@@ -139,8 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Si estaba oculta, mostrarla; si estaba visible, ocultarla
     entradaContrasena.type = contrasenaOculta ? 'text' : 'password';
 
-    // Cuando la contraseña es visible se muestra el ojo tachado
-    // Cuando la contraseña está oculta se muestra el ojo abierto
+    // Cuando la contraseña es visible se muestra el ojo tachado. Cuando la contraseña está oculta se muestra el ojo abierto
     alternarVisibilidad(iconoOjoAbierto, !contrasenaOculta);
     alternarVisibilidad(iconoOjoTachado, contrasenaOculta);
 
@@ -197,7 +196,17 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('nombreUsuario', datos.nombreUsuario);
 
       establecerEstadoCarga(false);
-      mostrarModalGeolocalizacion();
+
+      /*
+        El modal de geolocalización solo se muestra para el rol usuario ya que es el único que necesita el mapa. 
+        El administrador y el técnico se redirigen directamente a su panel sin necesidad de ubicación.
+      */
+
+      if (datos.rol === 'usuario') {
+        mostrarModalGeolocalizacion();
+      } else {
+        redirigirSegunRol();
+      }
 
     } catch (error) {
       mostrarAlertaError('No se pudo conectar con el servidor. Inténtalo de nuevo.');
@@ -215,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Solicita la geolocalización al navegador.
-
   function solicitarGeolocalizacion() {
     if (!navigator.geolocation) {
       mostrarErrorGeolocalizacion();
@@ -272,15 +280,28 @@ document.addEventListener('DOMContentLoaded', () => {
     alternarVisibilidad(panelError, false);
   });
 
-  // Comproboación de sesión activa al cargar la página
+  // 
+
+  /*
+  Comprobación de sesión activa al cargar la página:
+    - Para los roles "administrador" y "tecnico" se requiere tener el token
+    - Para el rol "usuario" se necesita, además del token, la geolocalización
+  
+  */
 
   const token    = localStorage.getItem('token');
   const rol      = localStorage.getItem('rol');
   const latitud  = localStorage.getItem('latitud');
   const longitud = localStorage.getItem('longitud');
 
-  if (token && rol && latitud && longitud) {
-    redirigirSegunRol();
+  if (token && rol) {
+    if (rol === 'usuario') {
+      if (latitud && longitud) {
+        redirigirSegunRol();
+      }
+    } else {
+      redirigirSegunRol();
+    }
   }
 
 }); // Fin DOMContentLoaded

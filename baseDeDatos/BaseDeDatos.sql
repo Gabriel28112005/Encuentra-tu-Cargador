@@ -34,7 +34,8 @@ CREATE TABLE cargadores (
     estado         ENUM('libre', 'ocupado', 'en_reparacion') NOT NULL DEFAULT 'libre',
     nivelBateria   INT                                       NOT NULL DEFAULT 100,
     tiempoEstimado INT                                       NOT NULL DEFAULT 30,
-    coste          DECIMAL(5, 2)                             NOT NULL DEFAULT 0.00
+    coste          DECIMAL(5, 2)                             NOT NULL DEFAULT 0.00,
+    UNIQUE KEY unicaCoordenada (latitud, longitud)
 );
 
 -- Creación de la tabla de reservas

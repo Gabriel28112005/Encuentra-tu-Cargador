@@ -64,7 +64,9 @@ router.post('/login', async (req, res) => {
         );
 
         // Registrar la sesión en la tabla sesiones
-        const direccionIP     = req.ip || req.connection.remoteAddress || 'Desconocida';
+        // Se convierte la IP a formato IPv4: ::ffff: es el prefijo IPv6 de IPs IPv4, y ::1 es el localhost en IPv6 (equivalente a 127.0.0.1)
+        const ipRaw       = req.ip || req.connection.remoteAddress || 'Desconocida';
+        const direccionIP = ipRaw.startsWith('::ffff:') ? ipRaw.slice(7) : ipRaw.replace('::1', '127.0.0.1');
         const dispositivoInfo = tipoDispositivo || 'Desconocido';
 
         await pool.execute(
@@ -86,7 +88,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// En el post del logout se cierra la sesión del usuario. El token se invalida en el frontend eliminándolo del localStorage. Esta ruta confirma el logout al cliente.
+// En el post del logout se cierra la sesión del usuario. El token se invalida en el frontend, eliminándolo del localStorage. Esta ruta confirma el logout al cliente.
 router.post('/logout', verificarToken, (req, res) => {
     return res.status(200).json({ mensaje: 'Sesión cerrada correctamente.' });
 });

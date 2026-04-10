@@ -1,10 +1,4 @@
-/**
- * Sesiones.js
- * Rutas de consulta del log de sesiones.
- * Solo accesible por el administrador.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+// Rutas de consultas del historial de logins
 
 'use strict';
 
@@ -13,11 +7,8 @@ const router  = express.Router();
 const pool    = require('../Db');
 const { verificarToken, verificarRol } = require('../autentificacionRoles/Middleware');
 
-// ═══════════════════════════════════════════════════════════
-// GET /api/sesiones
-// Devuelve el log completo de sesiones.
-// Solo accesible por el administrador.
-// ═══════════════════════════════════════════════════════════
+
+// Método GET /api/sesiones que devuelve el historial completo de logins. Únicamente es accesible por el administrador
 router.get('/sesiones', verificarToken, verificarRol('administrador'), async (req, res) => {
     try {
         const [filas] = await pool.execute(

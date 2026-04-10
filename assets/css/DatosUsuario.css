@@ -1,18 +1,13 @@
-/* ═══════════════════════════════════════════════════════════
-   DatosUsuario.css — Estilos de la página de perfil
-   Encuentra tu Cargador — Informática II
-   Autores: Gabriel Kaakedjian, Gabriel Peña
-════════════════════════════════════════════════════════════ */
-
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
-/* ── Reset y base ───────────────────────────────────────── */
+/* Resets básicos */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* Base*/
 body {
     font-family: 'Outfit', sans-serif;
     background-color: #f9fafb;
@@ -42,7 +37,7 @@ a:hover {
     display: none !important;
 }
 
-/* ── Cabecera ───────────────────────────────────────────── */
+/* Cabecera */
 .cabecera-sitio {
     background-color: white;
     border-bottom: 1px solid #e5e7eb;
@@ -135,7 +130,7 @@ a:hover {
     background-color: #f9fafb;
 }
 
-/* ── Contenedor principal ───────────────────────────────── */
+/* Main */
 .contenedor-principal {
     max-width: 1100px;
     margin: 2rem auto;
@@ -146,7 +141,7 @@ a:hover {
     align-items: start;
 }
 
-/* ── Tarjeta de sección ─────────────────────────────────── */
+/* Secciones */
 .tarjeta-seccion {
     background-color: white;
     border: 1px solid #e5e7eb;
@@ -164,7 +159,7 @@ a:hover {
     border-bottom: 1px solid #f3f4f6;
 }
 
-/* ── Campos de solo lectura ─────────────────────────────── */
+/* Campos de solo lectura */
 .campo-lectura {
     display: flex;
     justify-content: space-between;
@@ -187,7 +182,7 @@ a:hover {
     font-weight: 500;
 }
 
-/* ── Formulario de contraseña ───────────────────────────── */
+/* Formulario de cambio de contraseña */
 .grupo-campo {
     display: flex;
     flex-direction: column;
@@ -227,7 +222,7 @@ a:hover {
     color: #A32D2D;
 }
 
-/* ── Botones ────────────────────────────────────────────── */
+/* Botones */
 .boton-primario {
     background-color: #1a56db;
     color: white;
@@ -257,7 +252,7 @@ a:hover {
     background-color: #F7C1C1;
 }
 
-/* ── Tarjetas de reserva ────────────────────────────────── */
+/* Historial de reservas */
 .tarjeta-reserva {
     border: 1px solid #e5e7eb;
     border-radius: 10px;
@@ -293,7 +288,7 @@ a:hover {
     flex-shrink: 0;
 }
 
-/* ── Tarjetas de favorito ───────────────────────────────── */
+/* Historial de favoritos */
 .tarjeta-favorito {
     border: 1px solid #e5e7eb;
     border-radius: 10px;
@@ -322,7 +317,7 @@ a:hover {
     color: #6b7280;
 }
 
-/* ── Badges de estado ───────────────────────────────────── */
+/* Badges de estado */
 .badge-estado {
     font-size: 0.75rem;
     padding: 3px 10px;
@@ -337,7 +332,7 @@ a:hover {
 .badge-ocupado     { background-color: #FCEBEB; color: #791F1F; }
 .badge-reparacion  { background-color: #FAEEDA; color: #633806; }
 
-/* ── Barra de filtros ───────────────────────────────────── */
+/* Barra de filtros */
 .barra-filtros {
     display: flex;
     gap: 0.5rem;
@@ -379,7 +374,7 @@ a:hover {
     border-color: #1a56db;
 }
 
-/* ── Texto vacío y cargando ─────────────────────────────── */
+/* Texto vacío y cargando */
 .texto-cargando {
     font-size: 0.875rem;
     color: #9ca3af;
@@ -394,7 +389,7 @@ a:hover {
     padding: 1.5rem 0;
 }
 
-/* ── Paginación ─────────────────────────────────────────── */
+/* Paginación */
 .paginacion {
     display: flex;
     align-items: center;
@@ -433,7 +428,7 @@ a:hover {
     cursor: not-allowed;
 }
 
-/* ── Responsive ─────────────────────────────────────────── */
+/* Diseño responsive */
 @media (max-width: 768px) {
     .contenedor-principal {
         grid-template-columns: 1fr;

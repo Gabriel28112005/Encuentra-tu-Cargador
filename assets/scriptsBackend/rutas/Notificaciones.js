@@ -1,9 +1,4 @@
-/**
- * Notificaciones.js
- * Rutas de gestión de notificaciones e incidencias.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+// Rutas de gestión de notificaciones e incidencias
 
 'use strict';
 
@@ -13,11 +8,7 @@ const pool    = require('../Db');
 const { verificarToken, verificarRol } = require('../autentificacionRoles/Middleware');
 const { enviarNotificacion } = require('../WebSocket');
 
-// ═══════════════════════════════════════════════════════════
-// GET /api/notificaciones
-// Devuelve las notificaciones pendientes.
-// Solo accesible por administrador y técnico.
-// ═══════════════════════════════════════════════════════════
+// Petición GET /api/notificaciones que devuelve las notificaciones pendientes. Solo accesible por administrador y técnico.
 router.get('/notificaciones', verificarToken, verificarRol('administrador', 'tecnico'), async (req, res) => {
     try {
         const [filas] = await pool.execute(
@@ -35,12 +26,7 @@ router.get('/notificaciones', verificarToken, verificarRol('administrador', 'tec
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// POST /api/notificaciones
-// Reporta un cargador defectuoso.
-// Accesible por todos los roles.
-// Envía notificación en tiempo real a administrador y técnico.
-// ═══════════════════════════════════════════════════════════
+// Método POST /api/notificaciones que reporta un cargador defectuoso. Envía notificación en tiempo real a los usuarios con rol administrador o técnico
 router.post('/notificaciones', verificarToken, async (req, res) => {
     const { idCargador, mensaje } = req.body;
 
@@ -80,11 +66,8 @@ router.post('/notificaciones', verificarToken, async (req, res) => {
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// PUT /api/notificaciones/:id/leida
-// Marca una notificación como leída.
-// Solo accesible por administrador y técnico.
-// ═══════════════════════════════════════════════════════════
+
+// Petición PUT /api/notificaciones/:id/leida que marca una notificación como leída. Solo la pueden realizar el administrador y los técnicos
 router.put('/notificaciones/:id/leida', verificarToken, verificarRol('administrador', 'tecnico'), async (req, res) => {
     try {
         const [resultado] = await pool.execute(

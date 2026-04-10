@@ -1,17 +1,13 @@
-/* ═══════════════════════════════════════════════════════════
-   Tecnico.css — Estilos del panel de técnico
-   Encuentra tu Cargador — Informática II
-   Autores: Gabriel Kaakedjian, Gabriel Peña
-════════════════════════════════════════════════════════════ */
-
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
-/* ── Reset y base ───────────────────────────────────────── */
+/* Resets básicos */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
+
+/* Base */
 
 body {
     font-family: 'Outfit', sans-serif;
@@ -24,7 +20,7 @@ button { cursor: pointer; font-family: 'Outfit', sans-serif; }
 input, select { font-family: 'Outfit', sans-serif; }
 .oculto { display: none !important; }
 
-/* ── Cabecera ───────────────────────────────────────────── */
+/* Cabecera */
 .cabecera-sitio {
     background-color: white;
     border-bottom: 1px solid #e5e7eb;
@@ -102,7 +98,7 @@ input, select { font-family: 'Outfit', sans-serif; }
 
 .cabecera-usuario button:hover { background-color: #f9fafb; }
 
-/* ── Contenedor principal ───────────────────────────────── */
+/* Main */
 .contenedor-principal {
     max-width: 1280px;
     margin: 0 auto;
@@ -112,7 +108,7 @@ input, select { font-family: 'Outfit', sans-serif; }
     gap: 2rem;
 }
 
-/* ── Dashboard ──────────────────────────────────────────── */
+/* Dashboards */
 .seccion-dashboard { display: flex; flex-direction: column; gap: 1.5rem; }
 
 .titulo-bienvenida {
@@ -187,7 +183,7 @@ input, select { font-family: 'Outfit', sans-serif; }
     color: #6b7280;
 }
 
-/* ── Secciones ──────────────────────────────────────────── */
+/* Secciones */
 .tarjeta-seccion {
     background-color: white;
     border: 1px solid #e5e7eb;
@@ -211,7 +207,7 @@ input, select { font-family: 'Outfit', sans-serif; }
     color: #111827;
 }
 
-/* ── Filtros ────────────────────────────────────────────── */
+/* Filtros */
 .barra-filtros {
     display: flex;
     gap: 0.5rem;
@@ -249,7 +245,7 @@ input, select { font-family: 'Outfit', sans-serif; }
 
 .select-filtro:focus { border-color: #1a56db; }
 
-/* ── Tablas ─────────────────────────────────────────────── */
+/* Tablas */
 .contenedor-tabla { overflow-x: auto; }
 
 .tabla-tecnico {
@@ -278,7 +274,7 @@ input, select { font-family: 'Outfit', sans-serif; }
 .tabla-tecnico tr:last-child td { border-bottom: none; }
 .tabla-tecnico tr:hover td { background-color: #f9fafb; }
 
-/* ── Badges ─────────────────────────────────────────────── */
+/* Badges */
 .badge-estado {
     font-size: 0.75rem;
     padding: 2px 10px;
@@ -293,7 +289,7 @@ input, select { font-family: 'Outfit', sans-serif; }
 .badge-leida         { background-color: #F1EFE8; color: #444441; }
 .badge-noleida       { background-color: #FCEBEB; color: #791F1F; }
 
-/* ── Botones ────────────────────────────────────────────── */
+/* Botones */
 .boton-actualizar {
     background-color: #E6F1FB;
     color: #0C447C;
@@ -318,7 +314,7 @@ input, select { font-family: 'Outfit', sans-serif; }
 
 .boton-marcar:hover { background-color: #C0DD97; }
 
-/* ── Modal ──────────────────────────────────────────────── */
+/* Modal */
 .fondo-modal {
     position: fixed;
     top: 0;
@@ -425,7 +421,7 @@ input, select { font-family: 'Outfit', sans-serif; }
 
 .boton-enviar-modal:hover { background-color: #1648c8; }
 
-/* ── Textos vacío y cargando ────────────────────────────── */
+/* Textos vacío y cargando */
 .texto-cargando {
     font-size: 0.875rem;
     color: #9ca3af;
@@ -440,7 +436,7 @@ input, select { font-family: 'Outfit', sans-serif; }
     padding: 1.5rem 0;
 }
 
-/* ── Paginación ─────────────────────────────────────────── */
+/* Paginación */
 .paginacion {
     display: flex;
     align-items: center;
@@ -479,7 +475,7 @@ input, select { font-family: 'Outfit', sans-serif; }
     cursor: not-allowed;
 }
 
-/* ── Responsive ─────────────────────────────────────────── */
+/* Diseño responsive */
 @media (max-width: 768px) {
     .grid-estadisticas { grid-template-columns: repeat(2, 1fr); }
     .grid-accesos      { grid-template-columns: 1fr; }

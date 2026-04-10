@@ -1,18 +1,13 @@
-/* ═══════════════════════════════════════════════════════════
-   Index.css — Estilos de la pantalla de login
-   Encuentra tu Cargador — Informática II
-════════════════════════════════════════════════════════════ */
-
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap');
 
-/* ── Reset básico ───────────────────────────────────────── */
+/* Resets básicos */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-/* ── Base ───────────────────────────────────────────────── */
+/* Base */
 body {
     font-family: 'Outfit', sans-serif;
     background-color: #f9fafb;
@@ -59,7 +54,7 @@ a:hover {
     display: none !important;
 }
 
-/* ── Cabecera ───────────────────────────────────────────── */
+/* Cabecera*/
 .cabecera-sitio {
     background-color: white;
     border-bottom: 1px solid #e5e7eb;
@@ -107,7 +102,7 @@ a:hover {
     color: #9ca3af;
 }
 
-/* ── Layout principal ───────────────────────────────────── */
+/* Layout principal */
 .disposicion-principal {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -119,7 +114,7 @@ a:hover {
     flex: 1;
 }
 
-/* ── Panel izquierdo ────────────────────────────────────── */
+/* Panel izquierdo (nombre de la web, eslogan e información de la misma)*/
 .panel-informacion {
     padding: 2rem 1rem;
 }
@@ -172,7 +167,7 @@ a:hover {
     flex-shrink: 0;
 }
 
-/* ── Panel derecho — tarjeta formulario ─────────────────── */
+/* Panel derecho (formulario de login) */
 .panel-formulario {
     display: flex;
     justify-content: center;
@@ -207,7 +202,7 @@ a:hover {
     color: #9ca3af;
 }
 
-/* ── Alerta de error global ─────────────────────────────── */
+/* Alerta de error global */
 .alerta-error {
     display: flex;
     align-items: center;
@@ -227,7 +222,7 @@ a:hover {
     flex-shrink: 0;
 }
 
-/* ── Campos del formulario ──────────────────────────────── */
+/* Campos del formulario */
 .grupo-campo {
     display: flex;
     flex-direction: column;
@@ -314,7 +309,13 @@ a:hover {
     font-weight: 500;
 }
 
-/* ── Botón de acceder ───────────────────────────────────── */
+/* Oculta el botón nativo de Microsoft Edge para mostrar/ocultar contraseña,
+   evitando que aparezca duplicado junto al botón propio de la aplicación */
+input[type="password"]::-ms-reveal {
+    display: none;
+}
+
+/* Botón de acceder */
 .boton-acceder {
     width: 100%;
     padding: 0.8rem;
@@ -361,7 +362,7 @@ a:hover {
     to { transform: rotate(360deg); }
 }
 
-/* ── Modal de geolocalización ───────────────────────────── */
+/* Modal de geolocalización */
 .fondo-modal {
     position: fixed;
     top: 0;
@@ -468,7 +469,7 @@ a:hover {
     background-color: #f9fafb;
 }
 
-/* ── Pie de página ──────────────────────────────────────── */
+/* Pie de página */
 .pie-pagina {
     height: 48px;
     display: flex;
@@ -480,7 +481,7 @@ a:hover {
     background-color: white;
 }
 
-/* ── Responsive ─────────────────────────────────────────── */
+/* Diseño responsive para tablets y pantallas medianas (hasta 900px) */
 @media (max-width: 900px) {
     .disposicion-principal {
         grid-template-columns: 1fr;
@@ -497,6 +498,7 @@ a:hover {
     }
 }
 
+/* Diseño responsive para móviles (hasta 480px) */
 @media (max-width: 480px) {
     .cabecera-interior {
         padding: 0 1rem;

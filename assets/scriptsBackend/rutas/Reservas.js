@@ -1,23 +1,18 @@
-/**
- * Reservas.js
- * Rutas de gestión de reservas.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+//Configuración de las rutas para la gestión de reservas
 
 'use strict';
 
 const express = require('express');
-const router  = express.Router();
-const pool    = require('../Db');
+const router = require('express').Router();
+const pool = require('../Db');
 const { verificarToken, verificarRol } = require('../autentificacionRoles/Middleware');
+const { enviarNotificacion } = require('../WebSocket');
 
-// ═══════════════════════════════════════════════════════════
-// GET /api/reservas
-// Devuelve reservas según el rol:
-// - Usuario: solo sus propias reservas
-// - Administrador y Técnico: todas las reservas
-// ═══════════════════════════════════════════════════════════
+/*
+    Petición GET /api/reservas que devuelve reservas según el rol:
+        - Usuario: solo sus propias reservas
+        - Administrador y Técnico: todas las reservas
+*/
 router.get('/reservas', verificarToken, async (req, res) => {
     try {
         let filas;
@@ -49,11 +44,8 @@ router.get('/reservas', verificarToken, async (req, res) => {
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// POST /api/reservas
-// Crea una nueva reserva.
-// Accesible por todos los roles.
-// ═══════════════════════════════════════════════════════════
+
+// Petición POST /api/reservas que crea una nueva reserva
 router.post('/reservas', verificarToken, async (req, res) => {
     const { idCargador } = req.body;
 
@@ -88,6 +80,13 @@ router.post('/reservas', verificarToken, async (req, res) => {
             [idCargador]
         );
 
+        // Notificar en tiempo real a todos los roles del cambio de estado
+        enviarNotificacion(['administrador', 'tecnico', 'usuario'], {
+            tipo:       'estadoCargador',
+            idCargador: parseInt(idCargador),
+            estado:     'ocupado'
+        });
+
         return res.status(201).json({ mensaje: 'Reserva creada correctamente.' });
     } catch (error) {
         console.error('Error en POST /api/reservas:', error.message);
@@ -95,11 +94,8 @@ router.post('/reservas', verificarToken, async (req, res) => {
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// DELETE /api/reservas/:id
-// Cancela una reserva.
-// El usuario solo puede cancelar sus propias reservas.
-// ═══════════════════════════════════════════════════════════
+
+// Método DELETE /api/reservas/:id para cancelar una reserva
 router.delete('/reservas/:id', verificarToken, async (req, res) => {
     try {
         // Obtener la reserva
@@ -130,6 +126,13 @@ router.delete('/reservas/:id', verificarToken, async (req, res) => {
             `UPDATE cargadores SET estado = 'libre' WHERE id = ?`,
             [reserva.idCargador]
         );
+
+        // Notificar en tiempo real a todos los roles del cambio de estado
+        enviarNotificacion(['administrador', 'tecnico', 'usuario'], {
+            tipo:       'estadoCargador',
+            idCargador: reserva.idCargador,
+            estado:     'libre'
+        });
 
         return res.status(200).json({ mensaje: 'Reserva cancelada correctamente.' });
     } catch (error) {

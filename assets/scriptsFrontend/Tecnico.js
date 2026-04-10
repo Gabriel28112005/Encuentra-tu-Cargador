@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const textoUsuario          = document.getElementById('textoUsuario');
     const nombreBienvenida      = document.getElementById('nombreBienvenida');
-    const statCargadores        = document.getElementById('statCargadores');
     const statLibres            = document.getElementById('statLibres');
+    const statOcupados          = document.getElementById('statOcupados');
     const statReparacion        = document.getElementById('statReparacion');
     const statIncidencias       = document.getElementById('statIncidencias');
     const contenedorCargadores  = document.getElementById('contenedorCargadores');
@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para actualizar las estadísticas de los cargadores
     function actualizarEstadisticas() {
-        statCargadores.textContent  = todosLosCargadores.length;
         statLibres.textContent      = todosLosCargadores.filter(c => c.estado === 'libre').length;
+        statOcupados.textContent    = todosLosCargadores.filter(c => c.estado === 'ocupado').length;
         statReparacion.textContent  = todosLosCargadores.filter(c => c.estado === 'en_reparacion').length;
         statIncidencias.textContent = todasLasIncidencias.filter(n => n.leida === 0).length;
     }
@@ -294,5 +294,25 @@ document.addEventListener('DOMContentLoaded', () => {
         elemento.className   = 'mensaje-modal' + (esError ? ' error' : '');
         elemento.classList.remove('oculto');
     }
+
+    // Actualización en tiempo real del estado de los cargadores mediante WebSocket
+    const wsUrl = `ws://localhost:3000?rol=${localStorage.getItem('rol')}`;
+    const ws    = new WebSocket(wsUrl);
+
+    ws.addEventListener('message', (evento) => {
+        try {
+            const datos = JSON.parse(evento.data);
+            if (datos.tipo === 'estadoCargador') {
+                const cargador = todosLosCargadores.find(c => c.id === datos.idCargador);
+                if (cargador) {
+                    cargador.estado = datos.estado;
+                    actualizarEstadisticas();
+                    renderizarCargadores(todosLosCargadores);
+                }
+            }
+        } catch (error) {
+            console.error('Error al procesar mensaje WebSocket:', error.message);
+        }
+    });
 
 });

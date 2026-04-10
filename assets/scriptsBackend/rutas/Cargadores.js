@@ -1,9 +1,4 @@
-/**
- * Cargadores.js
- * Rutas de gestión de cargadores.
- * Encuentra tu Cargador — Informática II
- * Autores: Gabriel Kaakedjian, Gabriel Peña
- */
+// Rutas para la gestión de cargadores
 
 'use strict';
 
@@ -11,12 +6,9 @@ const express = require('express');
 const router  = express.Router();
 const pool    = require('../Db');
 const { verificarToken, verificarRol } = require('../autentificacionRoles/Middleware');
+const { enviarNotificacion }           = require('../WebSocket');
 
-// ═══════════════════════════════════════════════════════════
-// GET /api/cargadores
-// Devuelve la lista de todos los cargadores.
-// Accesible por todos los roles.
-// ═══════════════════════════════════════════════════════════
+// Petición GET /api/cargadores para obtener una lista de todos los cargadores. Está permitida para todos los roles
 router.get('/cargadores', verificarToken, async (req, res) => {
     try {
         const [filas] = await pool.execute(
@@ -29,11 +21,7 @@ router.get('/cargadores', verificarToken, async (req, res) => {
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// GET /api/cargadores/:id
-// Devuelve los detalles de un cargador concreto.
-// Accesible por todos los roles.
-// ═══════════════════════════════════════════════════════════
+// Petición GET /api/cargadores/:id para obtener los detalles de un cargador concreto. Pueden hacerla todos los roles
 router.get('/cargadores/:id', verificarToken, async (req, res) => {
     try {
         const [filas] = await pool.execute(
@@ -50,11 +38,7 @@ router.get('/cargadores/:id', verificarToken, async (req, res) => {
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// POST /api/cargadores
-// Crea un nuevo cargador.
-// Solo accesible por el administrador.
-// ═══════════════════════════════════════════════════════════
+// Petición POST /api/cargadores para crear un nuevo cargador. Solo puede realizarla el administrador
 router.post('/cargadores', verificarToken, verificarRol('administrador'), async (req, res) => {
     const { nombre, direccion, latitud, longitud, tipo, estado, nivelBateria, tiempoEstimado, coste } = req.body;
 
@@ -71,42 +55,71 @@ router.post('/cargadores', verificarToken, verificarRol('administrador'), async 
         );
         return res.status(201).json({ mensaje: 'Cargador creado correctamente.' });
     } catch (error) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ mensaje: 'Ya existe un cargador en esas coordenadas.' });
+        }
         console.error('Error en POST /api/cargadores:', error.message);
         return res.status(500).json({ mensaje: 'Error interno del servidor.' });
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// PUT /api/cargadores/:id
-// Actualiza los datos de un cargador.
-// Accesible por administrador y técnico.
-// ═══════════════════════════════════════════════════════════
+// Petición PUT /api/cargadores/:id para actualizar los datos de un cargador. Solo pueden hacerla el administrador y el técnico
 router.put('/cargadores/:id', verificarToken, verificarRol('administrador', 'tecnico'), async (req, res) => {
-    const { nombre, direccion, latitud, longitud, tipo, estado, nivelBateria, tiempoEstimado, coste } = req.body;
+    const { nombre, direccion, latitud, longitud, tipo, estado, tiempoEstimado, coste } = req.body;
 
     try {
+        // Obtener el cargador actual para conservar nivelBateria
+        const [actual] = await pool.execute(
+            `SELECT * FROM cargadores WHERE id = ?`,
+            [req.params.id]
+        );
+
+        if (actual.length === 0) {
+            return res.status(404).json({ mensaje: 'Cargador no encontrado.' });
+        }
+
         const [resultado] = await pool.execute(
             `UPDATE cargadores SET nombre = ?, direccion = ?, latitud = ?, longitud = ?,
              tipo = ?, estado = ?, nivelBateria = ?, tiempoEstimado = ?, coste = ?
              WHERE id = ?`,
-            [nombre, direccion, latitud, longitud, tipo, estado,
-             nivelBateria, tiempoEstimado, coste, req.params.id]
+            [
+                nombre         || actual[0].nombre,
+                direccion      || actual[0].direccion,
+                latitud        ?? actual[0].latitud,
+                longitud       ?? actual[0].longitud,
+                tipo           || actual[0].tipo,
+                estado         || actual[0].estado,
+                actual[0].nivelBateria,
+                tiempoEstimado ?? actual[0].tiempoEstimado,
+                coste          ?? actual[0].coste,
+                req.params.id
+            ]
         );
+
         if (resultado.affectedRows === 0) {
             return res.status(404).json({ mensaje: 'Cargador no encontrado.' });
         }
+
+        // Si el nuevo estado es libre, cancelar cualquier reserva activa asociada
+        if (estado === 'libre') {
+            await pool.execute(
+                `UPDATE reservas SET estado = 'cancelada'
+                 WHERE idCargador = ? AND estado = 'activa'`,
+                [req.params.id]
+            );
+        }
+
         return res.status(200).json({ mensaje: 'Cargador actualizado correctamente.' });
     } catch (error) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(409).json({ mensaje: 'Ya existe un cargador en esas coordenadas.' });
+        }
         console.error('Error en PUT /api/cargadores/:id:', error.message);
         return res.status(500).json({ mensaje: 'Error interno del servidor.' });
     }
 });
 
-// ═══════════════════════════════════════════════════════════
-// DELETE /api/cargadores/:id
-// Elimina un cargador.
-// Solo accesible por el administrador.
-// ═══════════════════════════════════════════════════════════
+// Petición DELETE /api/cargadores/:id para eliminar un cargador. Solo puede realizarla el administrador
 router.delete('/cargadores/:id', verificarToken, verificarRol('administrador'), async (req, res) => {
     try {
         const [resultado] = await pool.execute(

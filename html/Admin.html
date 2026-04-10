@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Gabriel Kaakedjian, Gabriel Peña" />
     <meta name="description" content="Panel de administrador" />
-    <title>Encuentra tu Cargador - Administrador </title>
+    <title>Encuentra tu Cargador — Administrador</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- CSS propio -->
+    
     <link rel="stylesheet" href="../assets/css/Admin.css" />
+    <link rel="icon" href="../assets/img/ImagenLogoUax.jpg" type="image/jpeg">
 </head>
 <body data-rol="administrador">
 
@@ -40,57 +41,57 @@
     <!-- Main -->
     <main class="contenedor-principal">
 
-        <!-- ── Dashboard: estadísticas y accesos rápidos ── -->
+        <!-- Dashboards -->
         <div id="seccionDashboard" class="seccion-dashboard">
 
             <h1 class="titulo-bienvenida">Bienvenido, <span id="nombreBienvenida"></span></h1>
 
-            <!-- Tarjetas de estadísticas -->
+            <!-- Estadísticas -->
             <div class="grid-estadisticas">
                 <div class="tarjeta-estadistica">
                     <span class="estadistica-numero" id="statUsuarios">—</span>
                     <span class="estadistica-etiqueta">Usuarios registrados</span>
                 </div>
                 <div class="tarjeta-estadistica">
-                    <span class="estadistica-numero" id="statCargadores">—</span>
-                    <span class="estadistica-etiqueta">Cargadores activos</span>
+                    <span class="estadistica-numero" id="statLibres">—</span>
+                    <span class="estadistica-etiqueta">Cargadores libres</span>
                 </div>
                 <div class="tarjeta-estadistica">
-                    <span class="estadistica-numero" id="statReservas">—</span>
-                    <span class="estadistica-etiqueta">Reservas totales</span>
+                    <span class="estadistica-numero" id="statOcupados">—</span>
+                    <span class="estadistica-etiqueta">Cargadores ocupados</span>
                 </div>
                 <div class="tarjeta-estadistica">
-                    <span class="estadistica-numero" id="statIncidencias">—</span>
-                    <span class="estadistica-etiqueta">Incidencias pendientes</span>
+                    <span class="estadistica-numero" id="statReparacion">—</span>
+                    <span class="estadistica-etiqueta">En reparación</span>
                 </div>
             </div>
 
-            <!-- Tarjetas de acceso rápido -->
+            <!-- Atajos de acceso rápido -->
             <div class="grid-accesos">
                 <div class="tarjeta-acceso" onclick="irA('seccionUsuarios')">
                     <div class="acceso-icono">👥</div>
                     <div class="acceso-nombre">Usuarios</div>
-                    <div class="acceso-descripcion">Gestionar usuarios del sistema</div>
+                    <div class="acceso-descripcion">Gestionar los usuarios del sistema</div>
                 </div>
                 <div class="tarjeta-acceso" onclick="irA('seccionCargadores')">
                     <div class="acceso-icono">⚡</div>
                     <div class="acceso-nombre">Cargadores</div>
-                    <div class="acceso-descripcion">Gestionar puntos de carga</div>
+                    <div class="acceso-descripcion">Crear, eliminar o modificar los cargadores</div>
                 </div>
                 <div class="tarjeta-acceso" onclick="irA('seccionReservas')">
                     <div class="acceso-icono">📋</div>
                     <div class="acceso-nombre">Reservas</div>
-                    <div class="acceso-descripcion">Ver todas las reservas</div>
+                    <div class="acceso-descripcion">Ver todas las reservas de los usuarios</div>
                 </div>
                 <div class="tarjeta-acceso" onclick="irA('seccionFavoritos')">
                     <div class="acceso-icono">⭐</div>
                     <div class="acceso-nombre">Favoritos</div>
-                    <div class="acceso-descripcion">Ver favoritos de usuarios</div>
+                    <div class="acceso-descripcion">Ver los favoritos de usuarios</div>
                 </div>
                 <div class="tarjeta-acceso" onclick="irA('seccionSesiones')">
                     <div class="acceso-icono">🔐</div>
                     <div class="acceso-nombre">Sesiones</div>
-                    <div class="acceso-descripcion">Historial de inicios de sesión en el sistema</div>
+                    <div class="acceso-descripcion">Historial de inicios de sesión</div>
                 </div>
                 <div class="tarjeta-acceso" onclick="irA('seccionNotificaciones')">
                     <div class="acceso-icono">🔔</div>
@@ -101,7 +102,7 @@
 
         </div>
 
-        <!-- seccion usuarios -->
+        <!-- Tabla de usuarios -->
         <div id="seccionUsuarios" class="tarjeta-seccion">
             <div class="seccion-cabecera">
                 <h2 class="seccion-titulo">Gestión de usuarios</h2>
@@ -121,7 +122,7 @@
             </div>
         </div>
 
-        <!-- sección cargadores  -->
+        <!-- Tabla de cargadores -->
         <div id="seccionCargadores" class="tarjeta-seccion">
             <div class="seccion-cabecera">
                 <h2 class="seccion-titulo">Gestión de cargadores</h2>
@@ -147,7 +148,7 @@
             </div>
         </div>
 
-        <!-- sección reservas -->
+        <!-- Tabla de reservas -->
         <div id="seccionReservas" class="tarjeta-seccion">
             <div class="seccion-cabecera">
                 <h2 class="seccion-titulo">Todas las reservas</h2>
@@ -166,7 +167,7 @@
             </div>
         </div>
 
-        <!-- ── Sección: Favoritos ── -->
+        <!-- Tabla de favoritos -->
         <div id="seccionFavoritos" class="tarjeta-seccion">
             <div class="seccion-cabecera">
                 <h2 class="seccion-titulo">Favoritos de usuarios</h2>
@@ -179,10 +180,10 @@
             </div>
         </div>
 
-        <!-- ── Sección: Sesiones ── -->
+        <!-- Tabla de sesiones -->
         <div id="seccionSesiones" class="tarjeta-seccion">
             <div class="seccion-cabecera">
-                <h2 class="seccion-titulo">Log de sesiones</h2>
+                <h2 class="seccion-titulo">Inicios de sesión</h2>
             </div>
             <div class="barra-filtros">
                 <input type="text" id="buscarSesion" class="entrada-filtro" placeholder="Buscar por usuario o IP..." />
@@ -192,7 +193,7 @@
             </div>
         </div>
 
-        <!-- ── Sección: Notificaciones ── -->
+        <!-- Tabla de incidencias -->
         <div id="seccionNotificaciones" class="tarjeta-seccion">
             <div class="seccion-cabecera">
                 <h2 class="seccion-titulo">Incidencias reportadas</h2>
@@ -211,7 +212,7 @@
 
     </main>
 
-    <!-- modal de creación/edición de usuarios -->
+    <!-- Modal de creación/edición de usuario -->
     <div class="fondo-modal oculto" id="fondoModalUsuario">
         <div class="tarjeta-modal">
             <h3 class="modal-titulo" id="tituloModalUsuario">Nuevo usuario</h3>
@@ -230,7 +231,20 @@
             </div>
             <div class="grupo-campo" id="grupoContrasenaModal">
                 <label class="etiqueta-campo">Contraseña</label>
-                <input type="password" id="modalContrasenaUsuario" class="entrada-campo" placeholder="Mínimo 8 caracteres" />
+                <div style="position:relative;display:flex;align-items:center;">
+                    <input type="password" id="modalContrasenaUsuario" class="entrada-campo" placeholder="Mínimo 8 caracteres" style="padding-right:2.5rem;" />
+                    <button type="button" id="botonVerContrasenaModal" style="position:absolute;right:0.6rem;background:none;border:none;cursor:pointer;color:#9ca3af;padding:0;display:flex;align-items:center;" aria-label="Mostrar contraseña">
+                        <svg id="ojoAbiertoModal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <svg id="ojoTachadoModal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;display:none;">
+                            <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+                            <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+                            <line x1="1" y1="1" x2="23" y2="23"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div class="grupo-campo">
                 <label class="etiqueta-campo">Rol</label>
@@ -248,7 +262,7 @@
         </div>
     </div>
 
-    <!-- Modal de creación/edición de cargadores -->
+    <!-- Modal de creación/edición de cargador -->
     <div class="fondo-modal oculto" id="fondoModalCargador">
         <div class="tarjeta-modal">
             <h3 class="modal-titulo" id="tituloModalCargador">Nuevo cargador</h3>
@@ -309,7 +323,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-   
+    
     <script src="../assets/scriptsFrontend/RutasProtegidas.js"></script>
     <script src="../assets/scriptsFrontend/Api.js"></script>
     <script src="../assets/scriptsFrontend/Notificaciones.js"></script>

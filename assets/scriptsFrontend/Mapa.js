@@ -44,13 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //Inicialización del mapa con Leaflet
-    
     const latitud  = parseFloat(localStorage.getItem('latitud'))  || 40.4168;
     const longitud = parseFloat(localStorage.getItem('longitud')) || -3.7038;
 
     const mapa = L.map('mapa', { zoomControl: true }).setView([latitud, longitud], 14);
 
-    // Teselas de OpenStreetMap
+    // Teselas de OpenStreetMap (gratuito)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         maxZoom: 19
@@ -153,13 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
         botonFavorito.disabled = false;
     }
 
-    // Ocultar panel lateral
+    // Para ocultar el panel lateral
     function ocultarDetalle() {
         panelDetalle.classList.add('oculto');
         cargadorActivo = null;
     }
 
-    // Cerrar panel al hacer clic en el mapa
+    // Cerrar el panel al hacer clic en el mapa
     mapa.on('click', () => {
         ocultarDetalle();
     });
@@ -192,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') aplicarFiltros();
     });
 
-    // Reserva de cargadores
+    // Reserva de un cargador
     botonReservar.addEventListener('click', () => {
         if (!cargadorActivo) return;
         modalNombreReserva.textContent = cargadorActivo.nombre;
@@ -236,14 +235,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Abrir en Google Maps
+    // Abrir la dirección del cargador en Google Maps
     botonNavegador.addEventListener('click', () => {
         if (!cargadorActivo) return;
         const url = `https://www.google.com/maps/dir/?api=1&destination=${cargadorActivo.latitud},${cargadorActivo.longitud}`;
         window.open(url, '_blank');
     });
 
-    // Reportar incidencia
+    //Reportar incidencia
     botonIncidencia.addEventListener('click', () => {
         if (!cargadorActivo) return;
         modalNombreCargador.textContent = cargadorActivo.nombre;
@@ -304,5 +303,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     cargarCargadores();
+
+    // Actualización en tiempo real del estado de los cargadores mediante WebSocket
+    const wsUrl = `ws://localhost:3000?rol=${localStorage.getItem('rol')}`;
+    const ws    = new WebSocket(wsUrl);
+
+    ws.addEventListener('message', (evento) => {
+        try {
+            const datos = JSON.parse(evento.data);
+            if (datos.tipo === 'estadoCargador') {
+                const cargador = todosLosCargadores.find(c => c.id === datos.idCargador);
+                if (cargador) {
+                    cargador.estado = datos.estado;
+                    renderizarMarcadores(todosLosCargadores);
+                    // Si el panel lateral está mostrando este cargador, actualizarlo también
+                    if (cargadorActivo && cargadorActivo.id === datos.idCargador) {
+                        cargadorActivo.estado = datos.estado;
+                        panelEstado.className   = `panel-valor estado-${datos.estado}`;
+                        panelEstado.textContent = etiquetaEstado(datos.estado);
+                        botonReservar.disabled  = datos.estado !== 'libre';
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error al procesar mensaje WebSocket:', error.message);
+        }
+    });
 
 });

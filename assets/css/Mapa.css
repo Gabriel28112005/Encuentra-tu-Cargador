@@ -1,18 +1,13 @@
-/* ═══════════════════════════════════════════════════════════
-   Mapa.css — Estilos del mapa interactivo de cargadores
-   Encuentra tu Cargador — Informática II
-   Autores: Gabriel Kaakedjian, Gabriel Peña
-════════════════════════════════════════════════════════════ */
-
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
-/* ── Reset y base ───────────────────────────────────────── */
+/* Resets básicos */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* Base */
 html, body {
     height: 100%;
     font-family: 'Outfit', sans-serif;
@@ -34,7 +29,7 @@ input, select, textarea {
     display: none !important;
 }
 
-/* ── Cabecera ───────────────────────────────────────────── */
+/* Cabecera */
 .cabecera-mapa {
     height: 56px;
     background-color: white;
@@ -168,21 +163,21 @@ input, select, textarea {
     color: #1648c8;
 }
 
-/* ── Contenedor principal ───────────────────────────────── */
+/* Main */
 .contenedor-mapa {
     display: flex;
     height: calc(100vh - 56px);
     position: relative;
 }
 
-/* ── Mapa ───────────────────────────────────────────────── */
+/* Mapa */
 #mapa {
     flex: 1;
     height: 100%;
     z-index: 1;
 }
 
-/* ── Panel lateral de detalles ──────────────────────────── */
+/* Panel lateral de detalles */
 .panel-detalle {
     width: 280px;
     height: 100%;
@@ -353,7 +348,7 @@ input, select, textarea {
     background-color: #F7C1C1;
 }
 
-/* ── Leyenda ────────────────────────────────────────────── */
+/* Leyenda */
 .leyenda {
     position: absolute;
     bottom: 1.5rem;
@@ -387,7 +382,7 @@ input, select, textarea {
 .leyenda-ocupado   { background-color: #A32D2D; }
 .leyenda-reparacion { background-color: #854F0B; }
 
-/* ── Marcadores personalizados de Leaflet ───────────────── */
+/* Marcadores personalizados de Leaflet */
 .marcador-cargador {
     width: 18px;
     height: 18px;
@@ -400,7 +395,7 @@ input, select, textarea {
 .marcador-ocupado    { background-color: #A32D2D; }
 .marcador-reparacion { background-color: #854F0B; }
 
-/* ── Modales ────────────────────────────────────────────── */
+/* Modales */
 .fondo-modal {
     position: fixed;
     top: 0;
@@ -505,7 +500,7 @@ input, select, textarea {
     color: #A32D2D;
 }
 
-/* ── Responsive ─────────────────────────────────────────── */
+/*  Diseño responsive */
 @media (max-width: 768px) {
     .cabecera-controles {
         display: none;
