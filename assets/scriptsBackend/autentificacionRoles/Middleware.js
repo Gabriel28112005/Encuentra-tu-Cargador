@@ -9,7 +9,12 @@ const path   = require('path');
 // Cargar variables de entorno desde la raíz del proyecto
 dotenv.config({ path: path.join(__dirname, '..', '..', '..', '.env') });
 
-// Verificación del token JWT y control de roles para rutas protegidas. Se ejecuta antes de acceder a cualquier ruta que requiera autenticación o autorización específica. Se comprueba que el token existe, es válido y no ha expirado.
+
+/*
+    Verificación del token JWT y control de roles para rutas protegidas. Se ejecuta antes de acceder a cualquier ruta que requiera
+    autenticación o autorización específica. Se comprueba que el token existe, es válido y no ha expirado.
+*/
+
 function verificarToken(req, res, next) {
     const cabecera = req.headers['authorization'];
 
