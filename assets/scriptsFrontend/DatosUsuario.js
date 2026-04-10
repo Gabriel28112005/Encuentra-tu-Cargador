@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
  
     const paginas = { reservas: 1, favoritos: 1 };
     const ELEMENTOS_POR_PAGINA = 10;
- 
+
     // Función auxiliar que genera el HTML de paginación estilo Gmail
     function crearPaginacion(total, paginaActual, onAnterior, onSiguiente) {
         const inicio = Math.min((paginaActual - 1) * ELEMENTOS_POR_PAGINA + 1, total);
@@ -54,7 +54,34 @@ document.addEventListener('DOMContentLoaded', () => {
         textoUsuario.textContent = nombreUsuario;
         textoUsuario.title       = `Nombre de usuario: ${nombreUsuario}`;
     }
- 
+
+    // Mostrar/ocultar contraseña para cada campo del formulario de cambio de contraseña
+    function configurarBotonOjo(botonId, inputId, ojoAbierto, ojoTachado) {
+        const boton  = document.getElementById(botonId);
+        const input  = document.getElementById(inputId);
+        const abierto  = document.getElementById(ojoAbierto);
+        const tachado  = document.getElementById(ojoTachado);
+
+        boton.addEventListener('click', (evento) => {
+            evento.preventDefault();
+            evento.stopPropagation();
+
+            const oculta = input.type === 'password';
+            input.type = oculta ? 'text' : 'password';
+
+            // Cuando la contraseña es visible se muestra el ojo tachado
+            // Cuando la contraseña está oculta se muestra el ojo abierto
+            abierto.classList.toggle('oculto', oculta);
+            tachado.classList.toggle('oculto', !oculta);
+
+            boton.setAttribute('aria-label', oculta ? 'Ocultar contraseña' : 'Mostrar contraseña');
+        });
+    }
+
+    configurarBotonOjo('botonVerActual',   'contrasenaActual',    'ojoAbiertoActual',   'ojoTachadoActual');
+    configurarBotonOjo('botonVerNueva',    'contrasenaNueva',     'ojoAbiertoNueva',    'ojoTachadoNueva');
+    configurarBotonOjo('botonVerConfirmar','confirmarContrasena', 'ojoAbiertoConfirmar','ojoTachadoConfirmar');
+
     async function cargarDatosUsuario() {
         try {
             const datos = await obtenerDatosUsuario();

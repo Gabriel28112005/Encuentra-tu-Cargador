@@ -196,20 +196,56 @@ a:hover {
     color: #374151;
 }
 
+/* Contenedor relativo para posicionar el botón de ojo dentro del campo */
+.contenedor-entrada {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .entrada-campo {
-    padding: 0.65rem 0.85rem;
+    padding: 0.65rem 2.5rem 0.65rem 0.85rem;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     font-size: 0.875rem;
     background-color: #f9fafb;
     outline: none;
     color: #111827;
+    width: 100%;
 }
 
 .entrada-campo:focus {
     border-color: #1a56db;
     background-color: white;
     box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+}
+
+/* Oculta el botón nativo de Microsoft Edge para mostrar/ocultar contraseña,
+   evitando que aparezca duplicado junto al botón propio de la aplicación */
+.entrada-campo[type="password"]::-ms-reveal {
+    display: none;
+}
+
+/* Botón de ojo para mostrar/ocultar contraseña */
+.boton-ojo {
+    position: absolute;
+    right: 0.6rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #9ca3af;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.boton-ojo:hover {
+    color: #6b7280;
+}
+
+.boton-ojo svg {
+    width: 18px;
+    height: 18px;
 }
 
 .mensaje-contrasena {
