@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (datos.tipo === 'incidencia') {
             mostrarToast(
                 `Incidencia en ${datos.nombreCargador}`,
-                `${datos.mensaje} — Reportado por ${datos.reportadoPor}`,
+                `${datos.mensaje} - Reportado por ${datos.reportadoPor}`,
                 'advertencia'
             );
         }

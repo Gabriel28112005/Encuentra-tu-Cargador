@@ -70,38 +70,73 @@
 
             <!-- Atajos de acceso rápido -->
             <div class="grid-accesos">
+                
+                <!-- Tarjeta de acceso a la tabla de incidencias -->
+                <div class="tarjeta-acceso" onclick="irA('seccionNotificaciones')">
+                    <div class="acceso-icono">
+                        <svg viewBox="0 0 24 24" fill="#E24B4A" xmlns="http://www.w3.org/2000/svg" style="width:32px;height:32px;">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                            <line x1="12" y1="9" x2="12" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="12" cy="17" r="1" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="acceso-nombre">Incidencias</div>
+                    <div class="acceso-descripcion">Incidencias reportadas</div>
+                </div>
+
+                <!-- Tarjeta de acceso a la tabla de usuarios -->
                 <div class="tarjeta-acceso" onclick="irA('seccionUsuarios')">
                     <div class="acceso-icono">👥</div>
                     <div class="acceso-nombre">Usuarios</div>
                     <div class="acceso-descripcion">Gestionar los usuarios del sistema</div>
                 </div>
+                
+                <!-- Tarjeta de acceso a la tabla de cargadores -->
                 <div class="tarjeta-acceso" onclick="irA('seccionCargadores')">
                     <div class="acceso-icono">⚡</div>
                     <div class="acceso-nombre">Cargadores</div>
                     <div class="acceso-descripcion">Crear, eliminar o modificar los cargadores</div>
                 </div>
+                
+                <!-- Tarjeta de acceso a la tabla de reservas -->
                 <div class="tarjeta-acceso" onclick="irA('seccionReservas')">
                     <div class="acceso-icono">📋</div>
                     <div class="acceso-nombre">Reservas</div>
                     <div class="acceso-descripcion">Ver todas las reservas de los usuarios</div>
                 </div>
+                
+                <!-- Tarjeta de acceso a la tabla de favoritos -->
                 <div class="tarjeta-acceso" onclick="irA('seccionFavoritos')">
                     <div class="acceso-icono">⭐</div>
                     <div class="acceso-nombre">Favoritos</div>
                     <div class="acceso-descripcion">Ver los favoritos de usuarios</div>
                 </div>
+                
+                <!-- Tarjeta de acceso a la tabla de sesiones -->
                 <div class="tarjeta-acceso" onclick="irA('seccionSesiones')">
                     <div class="acceso-icono">🔐</div>
                     <div class="acceso-nombre">Sesiones</div>
                     <div class="acceso-descripcion">Historial de inicios de sesión</div>
                 </div>
-                <div class="tarjeta-acceso" onclick="irA('seccionNotificaciones')">
-                    <div class="acceso-icono">🔔</div>
-                    <div class="acceso-nombre">Incidencias</div>
-                    <div class="acceso-descripcion">Incidencias reportadas</div>
-                </div>
             </div>
 
+        </div>
+
+        <!-- Tabla de incidencias -->
+        <div id="seccionNotificaciones" class="tarjeta-seccion">
+            <div class="seccion-cabecera">
+                <h2 class="seccion-titulo">Incidencias reportadas</h2>
+            </div>
+            <div class="barra-filtros">
+                <select id="filtroLeidaNotificacion" class="select-filtro">
+                    <option value="">Todas</option>
+                    <option value="0">Sin leer</option>
+                    <option value="1">Leídas</option>
+                </select>
+            </div>
+            <div class="contenedor-tabla" id="contenedorNotificaciones">
+                <p class="texto-cargando">Cargando notificaciones...</p>
+            </div>
         </div>
 
         <!-- Tabla de usuarios -->
@@ -192,23 +227,6 @@
             </div>
             <div class="contenedor-tabla" id="contenedorSesiones">
                 <p class="texto-cargando">Cargando sesiones...</p>
-            </div>
-        </div>
-
-        <!-- Tabla de incidencias -->
-        <div id="seccionNotificaciones" class="tarjeta-seccion">
-            <div class="seccion-cabecera">
-                <h2 class="seccion-titulo">Incidencias reportadas</h2>
-            </div>
-            <div class="barra-filtros">
-                <select id="filtroLeidaNotificacion" class="select-filtro">
-                    <option value="">Todas</option>
-                    <option value="0">Sin leer</option>
-                    <option value="1">Leídas</option>
-                </select>
-            </div>
-            <div class="contenedor-tabla" id="contenedorNotificaciones">
-                <p class="texto-cargando">Cargando notificaciones...</p>
             </div>
         </div>
 
