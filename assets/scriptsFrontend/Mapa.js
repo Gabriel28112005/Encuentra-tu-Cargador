@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const colores = {
             libre:         '#3B6D11',
             ocupado:       '#A32D2D',
-            en_reparacion: '#854F0B'
+            en_reparacion: '#E8760A'
         };
         const color = colores[estado] || '#888780';
         return L.divIcon({
