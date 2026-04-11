@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <th>Dirección</th>
                 <th>Tipo</th>
                 <th>Estado</th>
+                <th>Nivel de carga</th>
                 <th>Coste</th>
                 <th>Tiempo est.</th>
                 <th>Acción</th>
@@ -134,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${c.direccion}</td>
                 <td>${etiquetaTipo(c.tipo)}</td>
                 <td><span class="badge-estado badge-${c.estado}">${etiquetaEstado(c.estado)}</span></td>
+                <td>${c.nivelBateria}%</td>
                 <td>${c.coste} €/kWh</td>
                 <td>${c.tiempoEstimado} min</td>
                 <td>
