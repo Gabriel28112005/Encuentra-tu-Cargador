@@ -126,19 +126,23 @@
 
     </main>
 
-    <!-- Modal de actualización de estado de un cargador -->
+    <!-- Modal de edición de estado y nivel de carga de un cargador -->
     <div class="fondo-modal oculto" id="fondoModalEstado">
         <div class="tarjeta-modal">
-            <h3 class="modal-titulo">Actualizar estado</h3>
+            <h3 class="modal-titulo">Editar cargador</h3>
             <p class="modal-subtitulo" id="modalNombreCargador"></p>
             <input type="hidden" id="idCargadorActualizar" />
             <div class="grupo-campo">
-                <label class="etiqueta-campo">Nuevo estado</label>
+                <label class="etiqueta-campo">Estado</label>
                 <select id="modalNuevoEstado" class="entrada-campo">
                     <option value="libre">Libre</option>
                     <option value="ocupado">Ocupado</option>
                     <option value="en_reparacion">En reparación</option>
                 </select>
+            </div>
+            <div class="grupo-campo">
+                <label class="etiqueta-campo">Nivel de carga (%)</label>
+                <input type="number" id="modalNivelBateriaEstado" class="entrada-campo" placeholder="Ej: 80" min="0" max="100" />
             </div>
             <p class="mensaje-modal oculto" id="mensajeModalEstado"></p>
             <div class="modal-acciones">

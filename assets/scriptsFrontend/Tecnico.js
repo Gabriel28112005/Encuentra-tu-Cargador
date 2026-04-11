@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mensajeModalEstado    = document.getElementById('mensajeModalEstado');
     const botonCancelarEstado   = document.getElementById('botonCancelarEstado');
     const botonGuardarEstado    = document.getElementById('botonGuardarEstado');
+    const modalNivelBateriaEstado = document.getElementById('modalNivelBateriaEstado');
 
     let todosLosCargadores  = [];
     let todasLasIncidencias = [];
@@ -140,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${c.tiempoEstimado} min</td>
                 <td>
                     <button class="boton-actualizar" onclick="abrirModalEstado(${c.id})">
-                        Actualizar estado
+                        Editar
                     </button>
                 </td>
             </tr>`;
@@ -175,13 +176,14 @@ document.addEventListener('DOMContentLoaded', () => {
     filtroTipoCargador.addEventListener('change',   aplicarFiltrosCargadores);
     filtroEstadoCargador.addEventListener('change', aplicarFiltrosCargadores);
 
-    // Configuraciones para el modal que permite actualizar el estado del cargador.
+    // Configuraciones para el modal que permite editar el estado y el nivel de carga del cargador.
     window.abrirModalEstado = function(id) {
         const cargador = todosLosCargadores.find(c => c.id === id);
         if (!cargador) return;
-        idCargadorActualizar.value      = cargador.id;
-        modalNombreCargador.textContent = cargador.nombre;
-        modalNuevoEstado.value          = cargador.estado;
+        idCargadorActualizar.value        = cargador.id;
+        modalNombreCargador.textContent   = cargador.nombre;
+        modalNuevoEstado.value            = cargador.estado;
+        modalNivelBateriaEstado.value     = cargador.nivelBateria;
         mensajeModalEstado.classList.add('oculto');
         fondoModalEstado.classList.remove('oculto');
     };
@@ -191,14 +193,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     botonGuardarEstado.addEventListener('click', async () => {
-        const id       = idCargadorActualizar.value;
-        const estado   = modalNuevoEstado.value;
-        const cargador = todosLosCargadores.find(c => c.id === parseInt(id));
+        const id           = idCargadorActualizar.value;
+        const estado       = modalNuevoEstado.value;
+        const nivelBateria = parseInt(modalNivelBateriaEstado.value);
+        const cargador     = todosLosCargadores.find(c => c.id === parseInt(id));
         if (!cargador) return;
 
         try {
-            await actualizarCargador(id, { ...cargador, estado });
-            mostrarMensajeModal(mensajeModalEstado, 'Estado actualizado correctamente.', false);
+            await actualizarCargador(id, { ...cargador, estado, nivelBateria });
+            mostrarMensajeModal(mensajeModalEstado, 'Cargador actualizado correctamente.', false);
             setTimeout(() => {
                 fondoModalEstado.classList.add('oculto');
                 cargarCargadores();
