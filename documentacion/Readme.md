@@ -171,7 +171,7 @@ Ctrl + C
 
 ### Rol técnico
 - Panel con estadísticas en tiempo real: cargadores libres, ocupados, en reparación e incidencias pendientes.
-- Tabla de cargadores con posibilidad de actualizar su estado.
+- Tabla de cargadores con posibilidad de editar su estado y nivel de carga.
 - Gestión de incidencias: visualización y marcado como leídas.
 - Actualización automática de tablas y estadísticas mediante WebSockets al producirse cambios en cargadores e incidencias.
 - Cancelación automática de reservas expiradas cada minuto mediante un job programado con node-cron, liberando el cargador automáticamente.
@@ -179,7 +179,7 @@ Ctrl + C
 ### Rol administrador
 - Panel con estadísticas en tiempo real: incidencias pendientes, cargadores libres, ocupados y en reparación.
 - Gestión completa de usuarios: crear, editar y eliminar.
-- Gestión completa de cargadores: crear, editar y eliminar.
+- Gestión completa de cargadores: crear, editar (incluyendo nivel de carga) y eliminar.
 - Visualización de todas las reservas, favoritos, sesiones e incidencias.
 - Actualización automática de tablas y estadísticas mediante WebSockets al producirse cambios en cargadores, reservas e incidencias.
 - Cancelación automática de reservas expiradas cada minuto mediante un job programado con node-cron, liberando el cargador automáticamente.
