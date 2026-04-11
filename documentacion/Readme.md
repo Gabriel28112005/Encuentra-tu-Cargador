@@ -166,7 +166,8 @@ Ctrl + C
 - Reporte de incidencias sobre cargadores defectuosos.
 - Apertura de la ubicación del cargador en Google Maps.
 - Geolocalización automática para centrar el mapa en la posición del usuario.
-- Actualización en tiempo real del estado de los cargadores en el mapa mediante WebSockets.
+- Actualización en tiempo real del estado y color de los marcadores del mapa mediante WebSockets.
+- El mapa se actualiza automáticamente cuando el administrador crea, edita o elimina un cargador.
 - Cancelación automática de la reserva al expirar los 30 minutos mediante un job programado con node-cron, liberando el cargador automáticamente.
 
 ### Rol técnico
@@ -181,7 +182,8 @@ Ctrl + C
 - Gestión completa de usuarios: crear, editar y eliminar.
 - Gestión completa de cargadores: crear, editar (incluyendo nivel de carga) y eliminar.
 - Visualización de todas las reservas, favoritos, sesiones e incidencias.
-- Actualización automática de tablas y estadísticas mediante WebSockets al producirse cambios en cargadores, reservas e incidencias.
+- Actualización automática de todas las tablas mediante WebSockets al producirse cambios en cargadores, reservas, incidencias, usuarios, favoritos y sesiones.
+- El mapa de cargadores se actualiza en tiempo real para todos los usuarios cuando el administrador crea, edita o elimina un cargador.
 - Cancelación automática de reservas expiradas cada minuto mediante un job programado con node-cron, liberando el cargador automáticamente.
 - Historial de inicios de sesión con IP y dispositivo.
 

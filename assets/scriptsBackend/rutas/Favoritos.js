@@ -6,6 +6,7 @@ const express = require('express');
 const router  = express.Router();
 const pool    = require('../Db');
 const { verificarToken, verificarRol } = require('../autentificacionRoles/Middleware');
+const { enviarNotificacion }           = require('../WebSocket');
 
 
 /*
@@ -59,6 +60,10 @@ router.post('/favoritos', verificarToken, async (req, res) => {
             `INSERT INTO favoritos (idUsuario, idCargador) VALUES (?, ?)`,
             [req.usuario.id, idCargador]
         );
+
+        // Notificar en tiempo real al administrador para que recargue la tabla de favoritos
+        enviarNotificacion(['administrador'], { tipo: 'actualizarFavoritos' });
+
         return res.status(201).json({ mensaje: 'Cargador añadido a favoritos.' });
     } catch (error) {
         if (error.code === 'ER_DUP_ENTRY') {
@@ -81,6 +86,9 @@ router.delete('/favoritos/:idCargador', verificarToken, async (req, res) => {
         if (resultado.affectedRows === 0) {
             return res.status(404).json({ mensaje: 'Favorito no encontrado.' });
         }
+
+        // Notificar en tiempo real al administrador para que recargue la tabla de favoritos
+        enviarNotificacion(['administrador'], { tipo: 'actualizarFavoritos' });
 
         return res.status(200).json({ mensaje: 'Cargador eliminado de favoritos.' });
     } catch (error) {

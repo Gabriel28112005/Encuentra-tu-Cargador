@@ -18,6 +18,9 @@ const pool = require('../Db');
 // Importar middleware
 const { verificarToken } = require('../autentificacionRoles/Middleware');
 
+// Importar WebSocket para notificar al administrador de nuevas sesiones
+const { enviarNotificacion } = require('../WebSocket');
+
 // En el post del login se realiza la verificación de las credenciales del usuario y devuelve un token JWT. También registra la sesión en la tabla sesiones
 
 router.post('/login', async (req, res) => {
@@ -74,6 +77,9 @@ router.post('/login', async (req, res) => {
              VALUES (?, ?, ?, ?)`,
             [usuario.id, usuario.nombreUsuario, dispositivoInfo, direccionIP]
         );
+
+        // Notificar en tiempo real al administrador para que recargue la tabla de sesiones
+        enviarNotificacion(['administrador'], { tipo: 'actualizarSesiones' });
 
         // Devolver el token y los datos básicos del usuario
         return res.status(200).json({

@@ -6,6 +6,7 @@ const express = require('express');
 const router  = express.Router();
 const pool    = require('../Db');
 const { verificarToken, verificarRol } = require('../autentificacionRoles/Middleware');
+const { enviarNotificacion }           = require('../WebSocket');
 
 
 // Petición GET /api/usuarios que devuelve la lista completa de usuarios
@@ -63,6 +64,10 @@ router.post('/usuarios', verificarToken, verificarRol('administrador'), async (r
              VALUES (?, ?, ?, ?, ?)`,
             [nombre, apellido, nombreUsuario, hash, idRol]
         );
+
+        // Notificar en tiempo real al administrador para que recargue la tabla de usuarios
+        enviarNotificacion(['administrador'], { tipo: 'actualizarUsuarios' });
+
         return res.status(201).json({ mensaje: 'Usuario creado correctamente.' });
     } catch (error) {
         if (error.code === 'ER_DUP_ENTRY') {
@@ -91,6 +96,10 @@ router.put('/usuarios/:id', verificarToken, verificarRol('administrador'), async
         if (resultado.affectedRows === 0) {
             return res.status(404).json({ mensaje: 'Usuario no encontrado.' });
         }
+
+        // Notificar en tiempo real al administrador para que recargue la tabla de usuarios
+        enviarNotificacion(['administrador'], { tipo: 'actualizarUsuarios' });
+
         return res.status(200).json({ mensaje: 'Usuario actualizado correctamente.' });
     } catch (error) {
         if (error.code === 'ER_DUP_ENTRY') {
@@ -112,6 +121,10 @@ router.delete('/usuarios/:id', verificarToken, verificarRol('administrador'), as
         if (resultado.affectedRows === 0) {
             return res.status(404).json({ mensaje: 'Usuario no encontrado.' });
         }
+
+        // Notificar en tiempo real al administrador para que recargue la tabla de usuarios
+        enviarNotificacion(['administrador'], { tipo: 'actualizarUsuarios' });
+
         return res.status(200).json({ mensaje: 'Usuario eliminado correctamente.' });
     } catch (error) {
         console.error('Error en DELETE /api/usuarios/:id:', error.message);

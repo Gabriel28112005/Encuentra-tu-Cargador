@@ -212,7 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
             mostrarMensajeModal(mensajeReserva, 'Reserva creada correctamente.', false);
             setTimeout(() => {
                 fondoModalReserva.classList.add('oculto');
-                cargarCargadores();
                 ocultarDetalle();
             }, 1500);
         } catch (error) {
@@ -313,6 +312,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ws.addEventListener('message', (evento) => {
         try {
             const datos = JSON.parse(evento.data);
+
+            // Actualizar el color del marcador y el panel lateral cuando cambia el estado de un cargador
             if (datos.tipo === 'estadoCargador') {
                 const cargador = todosLosCargadores.find(c => c.id === datos.idCargador);
                 if (cargador) {
@@ -327,6 +328,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
+
+            // Recargar la lista completa de cargadores cuando se crea, edita o elimina uno
+            if (datos.tipo === 'actualizarCargadores') {
+                cargarCargadores();
+            }
+
         } catch (error) {
             console.error('Error al procesar mensaje WebSocket:', error.message);
         }

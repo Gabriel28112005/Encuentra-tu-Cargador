@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalEstadoCargador    = document.getElementById('modalEstadoCargador');
     const modalTiempoCargador    = document.getElementById('modalTiempoCargador');
     const modalCosteCargador     = document.getElementById('modalCosteCargador');
+    const modalNivelBateriaCargador = document.getElementById('modalNivelBateriaCargador');
     const mensajeModalCargador   = document.getElementById('mensajeModalCargador');
     const botonNuevoCargador     = document.getElementById('botonNuevoCargador');
     const botonCancelarCargador  = document.getElementById('botonCancelarCargador');
@@ -410,6 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalEstadoCargador.value       = 'libre';
         modalTiempoCargador.value       = '30';
         modalCosteCargador.value        = '0.20';
+        modalNivelBateriaCargador.value = '100';
         mensajeModalCargador.classList.add('oculto');
         fondoModalCargador.classList.remove('oculto');
     });
@@ -427,6 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalEstadoCargador.value       = c.estado;
         modalTiempoCargador.value       = c.tiempoEstimado;
         modalCosteCargador.value        = c.coste;
+        modalNivelBateriaCargador.value = c.nivelBateria;
         mensajeModalCargador.classList.add('oculto');
         fondoModalCargador.classList.remove('oculto');
     };
@@ -456,7 +459,8 @@ document.addEventListener('DOMContentLoaded', () => {
             tipo:           modalTipoCargador.value,
             estado:         modalEstadoCargador.value,
             tiempoEstimado: parseInt(modalTiempoCargador.value),
-            coste:          parseFloat(modalCosteCargador.value)
+            coste:          parseFloat(modalCosteCargador.value),
+            nivelBateria:   parseInt(modalNivelBateriaCargador.value)
         };
 
         if (!datos.nombre || !datos.direccion || isNaN(datos.latitud) || isNaN(datos.longitud)) {
@@ -799,6 +803,21 @@ document.addEventListener('DOMContentLoaded', () => {
             // Actualizar la tabla de reservas cuando se crea, completa o cancela una reserva
             if (datos.tipo === 'reserva') {
                 cargarReservas();
+            }
+
+            // Actualizar la tabla de usuarios cuando se crea, edita o elimina un usuario
+            if (datos.tipo === 'actualizarUsuarios') {
+                cargarUsuarios();
+            }
+
+            // Actualizar la tabla de favoritos cuando un usuario añade o elimina un favorito
+            if (datos.tipo === 'actualizarFavoritos') {
+                cargarFavoritos();
+            }
+
+            // Actualizar la tabla de sesiones cuando un usuario inicia sesión
+            if (datos.tipo === 'actualizarSesiones') {
+                cargarSesiones();
             }
 
         } catch (error) {

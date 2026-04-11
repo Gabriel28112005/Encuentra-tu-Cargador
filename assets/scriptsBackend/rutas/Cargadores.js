@@ -53,6 +53,12 @@ router.post('/cargadores', verificarToken, verificarRol('administrador'), async 
             [nombre, direccion, latitud, longitud, tipo || 'estandar', estado || 'libre',
              nivelBateria || 100, tiempoEstimado || 30, coste || 0.00]
         );
+
+        // Notificar en tiempo real a todos los roles para que recarguen la lista de cargadores
+        enviarNotificacion(['administrador', 'tecnico', 'usuario'], {
+            tipo: 'actualizarCargadores'
+        });
+
         return res.status(201).json({ mensaje: 'Cargador creado correctamente.' });
     } catch (error) {
         if (error.code === 'ER_DUP_ENTRY') {
@@ -65,10 +71,10 @@ router.post('/cargadores', verificarToken, verificarRol('administrador'), async 
 
 // Petición PUT /api/cargadores/:id para actualizar los datos de un cargador. Solo pueden hacerla el administrador y el técnico
 router.put('/cargadores/:id', verificarToken, verificarRol('administrador', 'tecnico'), async (req, res) => {
-    const { nombre, direccion, latitud, longitud, tipo, estado, tiempoEstimado, coste } = req.body;
+    const { nombre, direccion, latitud, longitud, tipo, estado, nivelBateria, tiempoEstimado, coste } = req.body;
 
     try {
-        // Obtener el cargador actual para conservar nivelBateria
+        // Obtener el cargador actual para conservar los campos no enviados
         const [actual] = await pool.execute(
             `SELECT * FROM cargadores WHERE id = ?`,
             [req.params.id]
@@ -89,7 +95,7 @@ router.put('/cargadores/:id', verificarToken, verificarRol('administrador', 'tec
                 longitud       ?? actual[0].longitud,
                 tipo           || actual[0].tipo,
                 estado         || actual[0].estado,
-                actual[0].nivelBateria,
+                nivelBateria   ?? actual[0].nivelBateria,
                 tiempoEstimado ?? actual[0].tiempoEstimado,
                 coste          ?? actual[0].coste,
                 req.params.id
@@ -108,6 +114,18 @@ router.put('/cargadores/:id', verificarToken, verificarRol('administrador', 'tec
                 [req.params.id]
             );
         }
+
+        // Notificar en tiempo real a todos los roles del cambio de estado del cargador
+        enviarNotificacion(['administrador', 'tecnico', 'usuario'], {
+            tipo:       'estadoCargador',
+            idCargador: parseInt(req.params.id),
+            estado:     estado || actual[0].estado
+        });
+
+        // Notificar también para recargar la lista completa de cargadores (por si cambiaron otros campos)
+        enviarNotificacion(['administrador', 'tecnico', 'usuario'], {
+            tipo: 'actualizarCargadores'
+        });
 
         return res.status(200).json({ mensaje: 'Cargador actualizado correctamente.' });
     } catch (error) {
@@ -129,6 +147,12 @@ router.delete('/cargadores/:id', verificarToken, verificarRol('administrador'), 
         if (resultado.affectedRows === 0) {
             return res.status(404).json({ mensaje: 'Cargador no encontrado.' });
         }
+
+        // Notificar en tiempo real a todos los roles para que recarguen la lista de cargadores
+        enviarNotificacion(['administrador', 'tecnico', 'usuario'], {
+            tipo: 'actualizarCargadores'
+        });
+
         return res.status(200).json({ mensaje: 'Cargador eliminado correctamente.' });
     } catch (error) {
         console.error('Error en DELETE /api/cargadores/:id:', error.message);
