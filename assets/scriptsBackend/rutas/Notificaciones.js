@@ -77,6 +77,12 @@ router.put('/notificaciones/:id/leida', verificarToken, verificarRol('administra
         if (resultado.affectedRows === 0) {
             return res.status(404).json({ mensaje: 'Notificación no encontrada.' });
         }
+
+        // Notificar en tiempo real a administrador y técnico para que recarguen las incidencias
+        enviarNotificacion(['administrador', 'tecnico'], {
+            tipo: 'incidencia'
+        });
+
         return res.status(200).json({ mensaje: 'Notificación marcada como leída.' });
     } catch (error) {
         console.error('Error en PUT /api/notificaciones/:id/leida:', error.message);

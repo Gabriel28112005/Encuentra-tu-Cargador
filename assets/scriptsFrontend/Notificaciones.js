@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Manejo de notificación recibida 
     function manejarNotificacion(datos) {
-        if (datos.tipo === 'incidencia') {
+        if (datos.tipo === 'incidencia' && datos.nombreCargador && datos.reportadoPor) {
             mostrarToast(
                 `Incidencia en ${datos.nombreCargador}`,
                 `${datos.mensaje} - Reportado por ${datos.reportadoPor}`,

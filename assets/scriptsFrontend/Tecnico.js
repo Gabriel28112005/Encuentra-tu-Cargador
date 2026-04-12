@@ -326,6 +326,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            // Recargar la lista completa de cargadores cuando se crea, edita o elimina uno
+            if (datos.tipo === 'actualizarCargadores') {
+                cargarCargadores().then(() => actualizarEstadisticas());
+            }
+
             // Actualizar estadísticas y tabla cuando llega una nueva incidencia
             if (datos.tipo === 'incidencia') {
                 cargarIncidencias().then(() => actualizarEstadisticas());
