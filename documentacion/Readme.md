@@ -52,7 +52,7 @@ Descomprima el archivo ZIP en una carpeta de su elección. Por ejemplo, en el Es
 
 ### Paso 2 - Crear el archivo de configuración
 
-Dentro de la carpeta del proyecto, cree un archivo nuevo llamado exactamente `.env` (sin ninguna extensión adicional). Para crearlo:
+Dentro de la carpeta del proyecto, entre en la carpeta `PaginaWeb_GabrielKaakedjianGabrielPenaI2PracticaFinal` y cree un archivo nuevo llamado exactamente `.env` (sin ninguna extensión adicional). Para crearlo:
 
 1. Abra el bloc de notas o cualquier editor de texto.
 2. Copie y pegue el siguiente contenido:
